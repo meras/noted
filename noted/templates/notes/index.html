@@ -1,37 +1,87 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-    <div class="jumbotron">
-        <h1 align='center'>NoteD!</h1>
-    </div>
 
-    <div class='col-md-9'>
-        {% if notes %}
-            {% for note in notes %}
-                <h3 class="page-header">
-                    <a href="{% url 'notes:addnote' %}?id={{ note.id }}">{{note.label}}</a>
-                </h3>
-                {{note.body|linebreaks}}
-                {% for tag in note.tags.all %}
-                    {{tag}}{% if not forloop.last %} | {% endif %}
-                {% endfor %}
-            {% endfor %}
-        {% else %}
-            <div class='alert alert-warning' align='center'>
-                <h3>No Notes Yet!</h3>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-2 sidebar">
+                <ul class="nav nav-sidebar">
+                    <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
+                    <li><a href="#">Reports</a></li>
+                    <li><a href="#">Analytics</a></li>
+                    <li><a href="#">Export</a></li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li><a href="">Nav item again</a></li>
+                    <li><a href="">One more nav</a></li>
+                    <li><a href="">Another nav item</a></li>
+                    <li><a href="">More navigation</a></li>
+                </ul>
+                <ul class="nav nav-sidebar">
+                    <li><a href="">Nav item again</a></li>
+                    <li><a href="">One more nav</a></li>
+                    <li><a href="">Another nav item</a></li>
+                </ul>
             </div>
-        {% endif %}
-    </div>
-    <div class="col-md-3">
-        <h3 class="page-header" align="right">Tags</h3>
-        <ul>
-            {% if tags %}
-                {% for tag in tags %}
-                <li>{{ tag }}</li>
-                {% endfor %}
-            {% else %}
-                <div class="alert alert-warning">No tags :(</div>
-            {% endif %}
-        </ul>
+            {# sidepanel with the list of notes#}
+            <div class="col-sm-2 col-sm-offset-2 sidebar" id="notelist">
+                <div class="list-group">
+{#                "addnote?id={{ note.id }}"#}
+                    {% for note in notes %}
+                        <a data-noteid="{{ note.id }}" href="#" class="list-group-item note" >
+                            <div class="header">
+                                <strong class="primary-font">{{note.label}}</strong>
+                                <small class="pull-right text-muted">
+                                    <span class="glyphicon glyphicon-time"></span>{{  note.timestamp|date:"M j" }}</small>
+                            </div>
+                            <p>
+                                <small>
+                                    {{ note.body|slice:":80" }}
+                                </small>
+                            </p>
+                        </a>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-sm-8 col-sm-offset-4 main">
+                {{ notes.first.body }}
+                {#                <h1 class="page-header">Note title</h1>#}
+                {#                <div class="btn-group" role="group" aria-label="...">#}
+                {#                    <button type="button" class="btn btn-default"> <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>Bold</button>#}
+                {#                    <button type="button" class="btn btn-default">Italic</button>#}
+                {#                    <button type="button" class="btn btn-default">Underline</button>#}
+                {#                </div>#}
+                {#                <h2 class="blog-post-title">Sample blog post</h2>#}
+                {#                <p class="blog-post-meta">January 1, 2014 by <a href="#">Mark</a></p>#}
+                {##}
+                {#                <p>This blog post shows a few different types of content that's supported and styled with Bootstrap. Basic typography, images, and code are all supported.</p>#}
+                {#                <hr>#}
+                {#                <p>Cum sociis natoque penatibus et magnis <a href="#">dis parturient montes</a>, nascetur ridiculus mus. Aenean eu leo quam. Pellentesque ornare sem lacinia quam venenatis vestibulum. Sed posuere consectetur est at lobortis. Cras mattis consectetur purus sit amet fermentum.</p>#}
+                {#                <blockquote>#}
+                {#                    <p>Curabitur blandit tempus porttitor. <strong>Nullam quis risus eget urna mollis</strong> ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit.</p>#}
+                {#                </blockquote>#}
+                {#                <p>Etiam porta <em>sem malesuada magna</em> mollis euismod. Cras mattis consectetur purus sit amet fermentum. Aenean lacinia bibendum nulla sed consectetur.</p>#}
+                {#                <h2>Heading</h2>#}
+                {#                <p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor. Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros.</p>#}
+                {#                <h3>Sub-heading</h3>#}
+                {#                <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</p>#}
+                {#                <pre><code>Example code block</code></pre>#}
+                {#                <p>Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>#}
+                {#                <h3>Sub-heading</h3>#}
+                {#                <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Aenean lacinia bibendum nulla sed consectetur. Etiam porta sem malesuada magna mollis euismod. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>#}
+                {#                <ul>#}
+                {#                    <li>Praesent commodo cursus magna, vel scelerisque nisl consectetur et.</li>#}
+                {#                    <li>Donec id elit non mi porta gravida at eget metus.</li>#}
+                {#                    <li>Nulla vitae elit libero, a pharetra augue.</li>#}
+                {#                </ul>#}
+                {#                <p>Donec ullamcorper nulla non metus auctor fringilla. Nulla vitae elit libero, a pharetra augue.</p>#}
+                {#                <ol>#}
+                {#                    <li>Vestibulum id ligula porta felis euismod semper.</li>#}
+                {#                    <li>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.</li>#}
+                {#                    <li>Maecenas sed diam eget risus varius blandit sit amet non magna.</li>#}
+                {#                </ol>#}
+                {#                <p>Cras mattis consectetur purus sit amet fermentum. Sed posuere consectetur est at lobortis.</p>#}
+            </div>
+        </div>
     </div>
 {% endblock body %}

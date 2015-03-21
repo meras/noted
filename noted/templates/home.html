@@ -2,21 +2,24 @@
 {% load static %}
 
 {% block body %}
+    <div class="container" style="min-width: 400px; width: 50%">
     <div class="jumbotron">
-        <h1 align='center'>Shalom!</h1>
-    	<div class='container' style='padding-top:10px'>
-		<form action="" method="post">{% csrf_token %}
-		<div class="row">
-			<div class="col-md-6">
-				<input type='text' id='id_username' name='username' class='form-control' placeholder='Username' />
-			</div>
-			<div class='col-md-6'>
-				<input type='password' id='id_password' name='password' class='form-control' placeholder='Password' />
-			</div>
-		</div>
-		<br>
-		<input type="submit" value="Login" class='btn btn-primary btn-lg btn-block' />
-		</form>
-	</div>
+        <div class='container' style='padding-top:10px'>
+            <img class="img-responsive center-block" src="{% static "noted/img/cow.png" %}">
+            <form action="" method="post">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type='text' name='username' class='form-control' placeholder='Username' />
+                    </div>
+                    <div class='col-md-6'>
+                        <input type='password' name='password' class='form-control' placeholder='Password' />
+                    </div>
+                </div>
+                <br>
+                <input type="submit" value="Login" class='btn btn-primary btn-lg btn-block' />
+            </form>
+        </div>
+    </div>
     </div>
 {% endblock body %}

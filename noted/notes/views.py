@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from models import Note, Tag
 from forms import NoteForm, TagForm
 from django.utils.text import slugify
@@ -66,3 +66,16 @@ def add_tag(request):
     return render(request, 'notes/addtag.html', {'form':form, 'tag':tag})
 
 
+
+@user_passes_test(superuser_only, login_url="/")
+def note_body(request):
+    note_id = None
+    if request.method == 'GET':
+        note_id = request.GET['note_id']
+
+    note_body = None
+    print Note.objects.get(pk=note_id)
+    if note_id:
+        note_body = Note.objects.get(pk=note_id)
+
+    return HttpResponse(note_body.body)
