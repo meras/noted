@@ -7,6 +7,8 @@ from forms import NoteForm, TagForm
 from django.utils.text import slugify
 from django.contrib.auth.decorators import user_passes_test
 
+from django.http import JsonResponse
+
 
 def superuser_only(user):
     return (user.is_authenticated() and user.is_superuser)
@@ -68,14 +70,14 @@ def add_tag(request):
 
 
 @user_passes_test(superuser_only, login_url="/")
-def note_body(request):
+def note_content(request):
     note_id = None
     if request.method == 'GET':
         note_id = request.GET['note_id']
 
-    note_body = None
+    note = None
     print Note.objects.get(pk=note_id)
     if note_id:
-        note_body = Note.objects.get(pk=note_id)
+        note = Note.objects.get(pk=note_id)
 
-    return HttpResponse(note_body.body)
+    return JsonResponse({'title': note.label, 'body': note.body})
