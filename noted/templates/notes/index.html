@@ -36,7 +36,7 @@
                             </div>
                             <p>
                                 <small>
-                                    {{ note.body|slice:":80" }}
+                                    {{ note.body|slice:":80"|striptags }}
                                 </small>
                             </p>
                         </a>
