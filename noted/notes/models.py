@@ -17,3 +17,11 @@ class Tag(models.Model):
     slug = models.SlugField(max_length=50)
     def __unicode__(self):
         return self.label
+
+class Folder(models.Model):
+    title = models.CharField(max_length=50)
+    owner = models.ForeignKey(User)
+    note = models.ManyToManyField(Note)
+
+    def __unicode__(self):
+        return self.title
