@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Note(models.Model):
@@ -37,7 +38,7 @@ class Tag(models.Model):
 
 class Folder(models.Model):
     title = models.CharField(max_length=50)
-    # owner = models.ForeignKey(User)
+    owner = models.ForeignKey(User, default=0)
     note = models.ManyToManyField(Note)
 
     def __unicode__(self):
