@@ -4,21 +4,6 @@
 
 
 $(document).ready(function () {
-    //$('.note').click(function(){
-    //    var note_id = $(this).attr("data-noteid");
-    //    var test_data = "HALLO ECLIPSE GLARGOW"
-    //
-    //    $.get('/notes/note_body/', {note_id: note_id}, function(data){
-    //        $('.editor').html(data);
-    //    });
-    //});
-
-    //          Demonstating how to delete a post
-    //
-    //$.post("/notes/addnote/?id=9", {control: 'delete',
-    //                       csrfmiddlewaretoken:$.cookie('csrftoken')
-    //                      });
-
     // this saves a note as a new instance
     $('.btn-success').click(function () {
         var csrftoken = $.cookie('csrftoken');

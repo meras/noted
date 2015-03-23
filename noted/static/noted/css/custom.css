@@ -33,6 +33,7 @@ body {
 .sidebar {
     display: none;
 
+
 }
 .sidebar::-webkit-scrollbar { width: 0 !important }
 @media (min-width: 768px) {
