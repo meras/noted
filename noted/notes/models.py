@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class Note(models.Model):
     """
     A Note represents a single unit of information
-    A note is made up of a single titel and body section (the content)
+    A note is made up of a single title and body section (the content)
     Timestamps are automatically generated with a creation of a new note
 
     Each note can have many Tags
@@ -27,7 +27,13 @@ class Note(models.Model):
 
 class Tag(models.Model):
     """
-
+    A note with the tag "django" does not store the string "django",
+    but instead includes a reference to the tag object with the
+    name "django". The tag's name is unique within the user's account.
+    If a note has been assigned the tag "food", then this is the same
+    tag as "food" on any other note in the account.
+    Each tag can be assigned to any number of notes, and each note
+    may have any number of tags.
     """
     label = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50)
@@ -37,6 +43,9 @@ class Tag(models.Model):
 
 
 class Folder(models.Model):
+    """
+
+    """
     title = models.CharField(max_length=50)
     owner = models.ForeignKey(User, default=0)
     note = models.ManyToManyField(Note)
