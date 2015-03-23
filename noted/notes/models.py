@@ -3,6 +3,7 @@ from django.db import models
 # Create your models here.
 class Note(models.Model):
     title = models.CharField(max_length=200)
+    #author = models.ForeignKey(User)
     body = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
 
@@ -20,7 +21,7 @@ class Tag(models.Model):
 
 class Folder(models.Model):
     title = models.CharField(max_length=50)
-    owner = models.ForeignKey(User)
+    #owner = models.ForeignKey(User)
     note = models.ManyToManyField(Note)
 
     def __unicode__(self):
