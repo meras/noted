@@ -13,19 +13,21 @@
 
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="intro-message" id="tryme">
+                    <div class="intro-message">
+                        <div id="tryme">
                         <h1>Try Me</h1>
                         <h3>Double click and start editing!</h3>
+                        </div>
                         <hr class="intro-divider">
                         <ul class="list-inline intro-social-buttons">
                             <li>
-                                <a href="#" class="btn btn-default btn-lg"><i class="fa fa-twitter fa-fw"></i> <span class="network-name">Twitter</span></a>
+                                <a href="#" class="btn btn-default btn-lg"><span class="network-name">Twitter</span></a>
                             </li>
                             <li>
-                                <a href="#" class="btn btn-default btn-lg"><i class="fa fa-github fa-fw"></i> <span class="network-name">Github</span></a>
+                                <a href="#" class="btn btn-default btn-lg"><span class="network-name">Github</span></a>
                             </li>
                             <li>
-                                <a href="#" class="btn btn-default btn-lg"><i class="fa fa-linkedin fa-fw"></i> <span class="network-name">Linkedin</span></a>
+                                <a href="#learn" class="btn btn-default btn-lg"><span class="network-name">Learn more</span></a>
                             </li>
                         </ul>
                     </div>
@@ -62,7 +64,7 @@
     </div>
     <!-- /.content-section-a -->
 
-    <div class="content-section-b">
+    <div class="content-section-b" id="learn">
 
         <div class="container">
 
@@ -164,6 +166,10 @@
         </div>
     </footer>
         <script>
-        var editor = new MediumEditor('#tryme')
+        var editor = new MediumEditor('#tryme',{
+            forcePlainText: true,
+            disableAnchorPreview: true,
+            buttons: ['bold', 'italic']
+        })
     </script>
 {% endblock %}
