@@ -44,8 +44,12 @@
                 </div>
             </div>
             <div class="col-sm-8 col-sm-offset-4 main">
-                <div class="note-info">
-                    {{ notes.first.label }}
+                <div class="note-info" id="">
+                    <section style="display: inline">
+                        {{ notes.first.label }}
+                    </section>
+                    <button type="button" class="btn btn-success">Success</button>
+                    <button type="button" class="btn btn-info">Edit</button>
                 </div>
                 <div class="editor">
                     {{ notes.first.body|safe }}
