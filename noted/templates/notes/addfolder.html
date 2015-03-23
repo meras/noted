@@ -1,18 +1,18 @@
-{% extends 'base.html' %}
+<{% extends 'base.html' %}
 {% load static %}
 {% block body %}
 
     <div class="jumbotron">
-        <h1 align='center'>Create New Note!</h1>
+        <h1 align='center'>Create New Folder!</h1>
     </div>
 
     <div class='col-md-12'>
-        <form id = "note_form"  method="post"  action="/notes/folder/{{folder_slug}}/add_note/">{% csrf_token %}
+        <form action="" method="post">{% csrf_token %}
             {{form.as_p}}
-            <input type='submit' value='New Note' class='btn btn-primary btn-lg btn-block' />
+            <input type='submit' value='New Folder' class='btn btn-primary btn-lg btn-block' />
         </form>
     </div>
-    {% if note %}
+    {% if folder %}
         <div class="col-md-12" style="padding-top:15px">
             <form action="" method="POST">{% csrf_token %}
                 <input type="hidden" name="control" value="delete" />

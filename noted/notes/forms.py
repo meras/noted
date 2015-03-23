@@ -1,5 +1,15 @@
 from django import forms
-from notes.models import Note, Tag
+from notes.models import Note, Tag, Folder
+
+
+class FolderForm(forms.ModelForm):
+    class Meta:
+        model = Folder
+        fields = ('name',)
+
+
+
+
 
 class NoteForm(forms.ModelForm):
     class Meta:
