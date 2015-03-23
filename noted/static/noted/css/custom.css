@@ -32,7 +32,9 @@ body {
 /* Hide for mobile, show later */
 .sidebar {
     display: none;
+
 }
+.sidebar::-webkit-scrollbar { width: 0 !important }
 @media (min-width: 768px) {
     .sidebar {
         position: fixed;
@@ -114,6 +116,10 @@ body {
 }
 .main .page-header {
     margin-top: 0;
+}
+
+.editor {
+    outline: none;
 }
 
 
