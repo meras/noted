@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-# Create your models here.
 class Note(models.Model):
     """
     A Note represents a single unit of information
@@ -42,13 +41,13 @@ class Tag(models.Model):
         return self.label
 
 
-class Folder(models.Model):
-    """
-
-    """
-    title = models.CharField(max_length=50)
-    owner = models.ForeignKey(User, default=0)
-    note = models.ManyToManyField(Note)
-
-    def __unicode__(self):
-        return self.title
+# class Folder(models.Model):
+#     """
+#
+#     """
+#     title = models.CharField(max_length=50)
+#     owner = models.ForeignKey(User, default=0)
+#     note = models.ManyToManyField(Note)
+#
+#     def __unicode__(self):
+#         return self.title

@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'notes',
     'registration',
+    'bootstrap3',
 )
 
 #COOOOOKIES!
