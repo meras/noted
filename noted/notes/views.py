@@ -9,18 +9,12 @@ from django.contrib.auth.decorators import user_passes_test
 from django.http import JsonResponse
 
 
-def superuser_only(user):
-    return (user.is_authenticated() and user.is_superuser)
-
-
-@user_passes_test(superuser_only, login_url="/")
 def index_view(request):
     notes = Note.objects.all().order_by('-timestamp')
     tags = Tag.objects.all()
     return render(request, 'notes/index.html', {'notes': notes, 'tags': tags})
 
 
-@user_passes_test(superuser_only, login_url="/")
 def add_tag(request):
     id = request.GET.get('id', None)
     if id is not None:
@@ -45,7 +39,6 @@ def add_tag(request):
     return render(request, 'notes/addtag.html', {'form': form, 'tag': tag})
 
 
-@user_passes_test(superuser_only, login_url="/")
 def note_content(request):
     note_id = None
     if request.method == 'GET':
@@ -58,7 +51,6 @@ def note_content(request):
     return JsonResponse({'title': note.title, 'body': note.body})
 
 
-@user_passes_test(superuser_only, login_url="/")
 def add_note(request):
     id = request.GET.get('id', None)
     if id is not None:
