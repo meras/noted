@@ -4,7 +4,7 @@ from notes.models import Note, Tag
 class NoteForm(forms.ModelForm):
     class Meta:
         model = Note
-        fields = ('label', 'body', 'tags')
+        fields = ('title', 'body', 'tags')
 
 
 class TagForm(forms.ModelForm):

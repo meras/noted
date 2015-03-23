@@ -30,7 +30,7 @@
                     {% for note in notes %}
                         <a data-noteid="{{ note.id }}" href="#" class="list-group-item note" >
                             <div class="header">
-                                <strong class="primary-font">{{note.label}}</strong>
+                                <strong class="primary-font">{{note.title}}</strong>
                                 <small class="pull-right text-muted">
                                     <span class="glyphicon glyphicon-time"></span>{{  note.timestamp|date:"M j" }}</small>
                             </div>
@@ -46,10 +46,11 @@
             <div class="col-sm-8 col-sm-offset-4 main">
                 <div class="note-info" id="">
                     <section style="display: inline">
-                        {{ notes.first.label }}
+                        {{ notes.first.title }}
                     </section>
-                    <button type="button" class="btn btn-success">Success</button>
+                    <button type="button" class="btn btn-success">New</button>
                     <button type="button" class="btn btn-info">Edit</button>
+                    <button type="button" class="btn btn-danger">Delete</button>
                 </div>
                 <div class="editor">
                     {{ notes.first.body|safe }}

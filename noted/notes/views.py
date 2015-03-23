@@ -55,7 +55,7 @@ def note_content(request):
     if note_id:
         note = Note.objects.get(pk=note_id)
 
-    return JsonResponse({'title': note.label, 'body': note.body})
+    return JsonResponse({'title': note.title, 'body': note.body})
 
 
 @user_passes_test(superuser_only, login_url="/")
@@ -67,14 +67,14 @@ def add_note(request):
         note = None
 
     if request.method == 'POST':
+        id = request.POST.get('id')
+        if id is not None:
+            note = get_object_or_404(Note, id=id)
+
         if request.POST.get('control') == 'delete':
             note.delete()
             messages.add_message(request, messages.INFO, "Note deleted")
             return HttpResponseRedirect(reverse('notes:index'))
-
-        id = request.POST.get('id')
-        if id is not None:
-            note = get_object_or_404(Note, id=id)
 
         form = NoteForm(request.POST, instance=note)
         if form.is_valid():
