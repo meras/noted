@@ -1,5 +1,5 @@
 from django import forms
-from models import Note, Tag  # , Folder
+from models import Note, Tag, Folder
 
 
 class NoteForm(forms.ModelForm):
@@ -17,7 +17,8 @@ class TagForm(forms.ModelForm):
         model = Tag
         fields = ('label',)
 
-# class FolderForm(forms.ModelForm):
-# class Meta:
-#         model = Folder
-#         fields = ('title', 'note')
+
+class FolderForm(forms.ModelForm):
+    class Meta:
+        model = Folder
+        fields = ('title', )

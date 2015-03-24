@@ -2,6 +2,9 @@
 {% load static %}
 {% block body %}
 
+    {% if not notes %}
+    <h1>You have no notes</h1>
+    {% else %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-2 sidebar">
@@ -27,6 +30,7 @@
             <div class="col-sm-2 col-sm-offset-2 sidebar" id="notelist">
                 <div class="list-group">
                     {#                "addnote?id={{ note.id }}"#}
+
                     {% for note in notes %}
                         <a data-noteid="{{ note.id }}" href="#" class="list-group-item note" >
                             <div class="header">
@@ -41,6 +45,7 @@
                             </p>
                         </a>
                     {% endfor %}
+
                 </div>
             </div>
             <div class="col-sm-8 col-sm-offset-4 main">
@@ -62,4 +67,6 @@
     <script>
         var editor = new MediumEditor('.editor')
     </script>
+
+    {% endif %}
 {% endblock body %}

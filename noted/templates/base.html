@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <title>{% block title %}noteD - The unsecure way to store your thoughts{% endblock title %}</title>
+    <title>{% block title %}PAMM shit sacks{% endblock title %}</title>
     {% block stylesheets %}
         <link rel="stylesheet" href="{% static 'noted/css/bootstrap.min.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'noted/css/custom.css' %}">
@@ -80,10 +80,13 @@
                             <a href="{% url 'notes:index' %}">{{ user.username }}</a>
                         </li>
                         <li>
+                            <a href="{% url 'auth_logout' %}?next=/">Sign out</a>
+                        </li>
+                        <li>
                             <a href="{% url 'notes:addnote' %}">Add note</a>
                         </li>
                         <li>
-                            <a href="{% url 'notes:addtag' %}">add tag</a>
+                            <a href="{% url 'notes:addtag' %}">Add tag</a>
                         </li>
                     {% else %}
                         <li>
