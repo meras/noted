@@ -25,7 +25,23 @@ function getNote(thisRef) {
         $('.note-info > section').html(data.title);
         $('.editor').html(data.body);
     })
-};
+}
+// inserts a new empty note
+function addNote() {
+    var csrftoken = $.cookie('csrftoken');
+    var data = {
+        title: "New note",
+        body: " ",
+        csrfmiddlewaretoken: $.cookie('csrftoken')
+    };
+
+    $.post("/notes/addnote/", data).success(function (data) {
+        $('.list-group').prepend(data);
+        $('.note:first').on("click", function () {
+            getNote($(this))
+        });
+    });
+}
 
 $(document).ready(function () {
     // retrieve a note once clicked on a list
