@@ -93,7 +93,8 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = '/var/www/meras/static'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),
+    )
 
 # This is some sort of caching magic
 TEMPLATE_LOADERS = (
@@ -103,8 +104,11 @@ TEMPLATE_LOADERS = (
     )),
 )
 
+FIXTURE_DIRS = (
+   os.path.join(BASE_DIR,"notes/fixtures/"),
+)
 
-# Registratio Redux
+# Registration Redux
 REGISTRATION_OPEN = True         # If True, users can register
 ACCOUNT_ACTIVATION_DAYS = 7     # One-week activation window; you may, of course, use a different value.
 REGISTRATION_AUTO_LOGIN = True  # If True, the user will be automatically logged in.

@@ -11,7 +11,7 @@ class Folder(models.Model):
     owner's account. Folders can be grouped into stacks, which
     contain one or more notebooks, but cannot directly contain notes.
     """
-    title = models.CharField(max_length=50)
+    title = models.CharField(max_length=50, unique=True)
     owner = models.ForeignKey(User, default=0)
     slug = models.SlugField(default='')
 
