@@ -15,14 +15,19 @@ def populate():
 
     tag = add_tag(label=fake.word(), slug='portugal')
 
+    folder = add_folder(title=fake.word(), owner=user)
+
     text = ''
     for i in range(0,20):
         text += ' '.join(fake.paragraphs())
+
     note = add_note(title=fake.company(),
+                    author = user,
+                    folder = folder,
                     timestamp=fake.date_time_this_year(),
                     body= text, tags=28)
 
-    #folder = add_folder(title=fake.word(), owner=user)
+
 
 
 # Defining the add functions for our models
@@ -46,7 +51,7 @@ def add_user(username, first_name, email, password, is_active):
     return u
 
 
-def add_note(title, timestamp, body, tags):
+def add_note(title, author, folder, timestamp, body, tags):
     """
 
     :param title: string
@@ -55,7 +60,7 @@ def add_note(title, timestamp, body, tags):
     :param tags: a list? of Tag Objects?
     :return:
     """
-    n = Note.objects.get_or_create(title=title, timestamp=timestamp, body=body)[0]
+    n = Note.objects.get_or_create(title=title, author= author,folder = folder,timestamp=timestamp, body=body)[0]
     return n
 
 
@@ -81,7 +86,7 @@ if __name__ == '__main__':
     ## Printing and importing necessary things
     print "Starting NoteD population script..."
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'noted.settings')
-    from notes.models import Note, Tag #,Folder
+    from notes.models import Note, Tag, Folder
     from django.contrib.auth.models import User
     import django
 
