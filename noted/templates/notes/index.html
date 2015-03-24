@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-
+    <div id="sunset">
+        {% if not notes %}
+            {#    <script>$('#mango').css("background-image", "url(http://i.imgur.com/RDBMPs9.jpg",);  </script>#}
+            <h1>You have no notes</h1>
+        {% else %}
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-2 sidebar">
@@ -63,4 +67,6 @@
         var title = new MediumEditor('.note-info>section');
 
     </script>
+  </div>
+ {% endif %}
 {% endblock body %}
