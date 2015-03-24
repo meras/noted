@@ -35,10 +35,12 @@ function validateURL(textval) {
 function addNote() {
     var csrftoken = $.cookie('csrftoken');
     var folder_id = 1;
+    var url = window.location.pathname.split( '/' )[3];
     var data = {
         title: "New note",
         body: " ",
         folder_id: folder_id,
+        folder_name: url,
         csrfmiddlewaretoken: $.cookie('csrftoken')
     };
 
@@ -63,10 +65,13 @@ $(document).ready(function () {
         var csrftoken = $.cookie('csrftoken');
         //TODO get correct folder id
         var folder_id = 1;
+        var url = window.location.pathname.split( '/' )[3];
+
         var data = {
             title: "New note",
             body: " ",
             folder_id: folder_id,
+            folder_name: url,
             csrfmiddlewaretoken: $.cookie('csrftoken')
         };
 

@@ -94,11 +94,10 @@ def delete_note(request):
 def add_note(request):
     if request.is_ajax():
         form = NoteForm(request.POST)
-        folder_id = request.POST.get('folder_id')
-        print folder_id
+        folder_name = request.POST.get('folder_name')
         if form.is_valid():
             note = form.save(commit=False)
-            note.folder = Folder.objects.get(pk=folder_id)
+            note.folder = Folder.objects.get(slug=folder_name)
             note.save()
             # return HttpResponseRedirect(reverse('notes:index'))
             # return JsonResponse({'title': note.title, 'body': note.body, 'timestamp': note.timestamp})
@@ -133,7 +132,7 @@ def add_folder(request):
 
 
 def folder(request, folder_title_slug):
-    # Create a context dictionary which we can pass to the template rendering engine.
+    # Create a c ontext dictionary which we can pass to the template rendering engine.
     context_dict = {}
 
     try:
