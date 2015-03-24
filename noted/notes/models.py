@@ -47,6 +47,11 @@ class Note(models.Model):
 
 
 class Tag(models.Model):
+    """
+    Each user account contains a set of zero or more Tags,
+    which are an organizational tool to help users find
+    relevant notes. Tags are applied only to Notes
+    """
     label = models.CharField(max_length=50)
     slug = models.SlugField(max_length=50)
 

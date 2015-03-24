@@ -1,28 +1,17 @@
 from django.shortcuts import render
-from django.core.urlresolvers import reverse
-from django.contrib import messages
-from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
-from django.http import HttpResponseRedirect
 
 def landing(request):
+    """
+    View for the landing page of our project
+    :return: Landing Page Template
+    """
     return render(request, 'index.html')
 
+
 def demo(request):
+    """
+    View just leads to a static page for demoing the WYSIWYG
+    :return: Demo Template
+    """
     return render(request, 'demo.html')
 
-def home_view(request):
-
-    if request.method == 'POST':
-        username = request.POST.get('username', None)
-        password = request.POST.get('password', None)
-
-        auth = authenticate(username=username, password=password)
-        if auth is not None:
-            login(request, auth)
-            return HttpResponseRedirect(reverse('notes:index'))
-        else:
-            messages.add_message(request, messages.INFO, "Authentication failed :(")
-            return HttpResponseRedirect(reverse('home'))
-
-    return render(request, 'home.html')
