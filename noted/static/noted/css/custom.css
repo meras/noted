@@ -32,8 +32,6 @@ body {
 /* Hide for mobile, show later */
 .sidebar {
     display: none;
-
-
 }
 .sidebar::-webkit-scrollbar { width: 0 !important }
 @media (min-width: 768px) {
