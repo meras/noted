@@ -8,6 +8,9 @@ from django.http import HttpResponseRedirect
 def landing(request):
     return render(request, 'index.html')
 
+def demo(request):
+    return render(request, 'demo.html')
+
 def home_view(request):
 
     if request.method == 'POST':
