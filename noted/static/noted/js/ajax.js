@@ -37,8 +37,8 @@ function addNote() {
     var folder_id = 1;
     var url = window.location.pathname.split( '/' )[3];
     var data = {
-        title: "New note",
-        body: " ",
+        title: "New Note",
+        body: "",
         folder_id: folder_id,
         folder_name: url,
         csrfmiddlewaretoken: $.cookie('csrftoken')
@@ -61,14 +61,14 @@ $(document).ready(function () {
     $('.note:first').click();
 
     // this creates a note as a new instance
-    $('.btn-success').click(function () {
+    $('#new').click(function () {
         var csrftoken = $.cookie('csrftoken');
         //TODO get correct folder id
         var folder_id = 1;
         var url = window.location.pathname.split( '/' )[3];
 
         var data = {
-            title: "New note",
+            title: "New Note",
             body: " ",
             folder_id: folder_id,
             folder_name: url,
@@ -87,7 +87,7 @@ $(document).ready(function () {
 
 
     //delete an existing note
-    $('.btn-danger').click(function () {
+    $('#delete').click(function () {
         var note_id = $('.note-info').attr('id');
         var note_title = $('.note-info > section').html();
         var csrftoken = $.cookie('csrftoken');
@@ -108,7 +108,7 @@ $(document).ready(function () {
         });
     });
 
-    $('.btn-info').click(function () {
+    $('#save').click(function () {
         saveChanges()
     });
 
