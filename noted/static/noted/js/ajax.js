@@ -7,15 +7,17 @@ $(document).ready(function () {
     // this saves a note as a new instance
     $('.btn-success').click(function () {
         var csrftoken = $.cookie('csrftoken');
-        var note_title = $('.note-info > section').html();
         var note_content = $('.editor').html();
         var data = {
-            title: note_title,
+            title: "New note",
             body: note_content,
             csrfmiddlewaretoken: $.cookie('csrftoken')
         };
 
-        $.post("/notes/addnote/", data);
+        $.post("/notes/addnote/", data).success(function (data) {
+            $('.list-group').prepend(data)
+        });
+
     });
 
     //edit an existing note
@@ -30,13 +32,16 @@ $(document).ready(function () {
             body: note_content,
             csrfmiddlewaretoken: $.cookie('csrftoken')
         };
-        console.log(note_id);
 
-        $.post("/notes/addnote/", data);
+        $.post("/notes/editnote/", data).success(function (data) {
+            $('[data-noteid=' + note_id + ']>p>small').empty().append(data.preview);
+        });
+
     });
 
     //delete an existing note
     $('.btn-danger').click(function () {
+        console.log("danger");
         var note_id = $('.note-info').attr('id');
         var note_title = $('.note-info > section').html();
         var csrftoken = $.cookie('csrftoken');
@@ -45,14 +50,13 @@ $(document).ready(function () {
             control: 'delete',
             csrfmiddlewaretoken: $.cookie('csrftoken')
         };
-        console.log(note_id);
 
         $.ajax({
             type: "POST",
-            url: "/notes/addnote/",
+            url: "/notes/deletenote/",
             data: data,
             success: function () {
-                alert(note_title.concat(" has been successfully deleted"));
+                $('[data-noteid=' + note_id + ']').empty().append("DELETED");
             }
         });
     });

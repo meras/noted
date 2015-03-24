@@ -26,7 +26,6 @@
             {# sidepanel with the list of notes#}
             <div class="col-sm-2 col-sm-offset-2 sidebar" id="notelist">
                 <div class="list-group">
-                    {#                "addnote?id={{ note.id }}"#}
                     {% for note in notes %}
                         <a data-noteid="{{ note.id }}" href="#" class="list-group-item note" >
                             <div class="header">
@@ -35,7 +34,7 @@
                                     <span class="glyphicon glyphicon-time"></span>{{  note.timestamp|date:"M j" }}</small>
                             </div>
                             <p>
-                                <small>
+                                <small class="preview">
                                     {{ note.body|slice:":80"|striptags }}
                                 </small>
                             </p>
@@ -46,20 +45,22 @@
             <div class="col-sm-8 col-sm-offset-4 main">
                 <div class="note-info" id="">
                     <section style="display: inline">
-                        {{ notes.first.title }}
+{#                        {{ notes.first.title }}#}
                     </section>
                     <button type="button" class="btn btn-success">New</button>
                     <button type="button" class="btn btn-info">Edit</button>
                     <button type="button" class="btn btn-danger">Delete</button>
                 </div>
                 <div class="editor">
-                    {{ notes.first.body|safe }}
+{#                    {{ notes.first.body|safe }}#}
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        var editor = new MediumEditor('.editor')
+        var editor = new MediumEditor('.editor');
+        var title = new MediumEditor('.note-info>section');
+
     </script>
 {% endblock body %}
