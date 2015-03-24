@@ -7,7 +7,6 @@ from forms import NoteForm, TagForm
 from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.contrib.auth.decorators import login_required
 from django.utils.html import strip_tags
 
 
@@ -73,7 +72,8 @@ def edit_note(request):
         if form.is_valid():
             note = form.save()
             messages.add_message(request, messages.INFO, "Note added")
-            return JsonResponse({'preview': strip_tags(note.body[:80])})
+            #return JsonResponse({'title': note.title,'preview': strip_tags(note.body[:80])})
+            return render(request, 'notes/note_entry.html', {'note': note})
 
 
 @login_required
@@ -91,56 +91,38 @@ def delete_note(request):
 
 @login_required
 def add_note(request):
-    id = request.GET.get('id', None)
-    if id is not None:
-        note = get_object_or_404(Note, id=id)
-    else:
-        note = None
-
-    if request.method == 'POST':
-        id = request.POST.get('id')
-        if id is not None:
-            note = get_object_or_404(Note, id=id)
-
-        if request.POST.get('control') == 'delete':
-            note.delete()
-            messages.add_message(request, messages.INFO, "Note deleted")
-            return HttpResponseRedirect(reverse('notes:index'))
-
-        form = NoteForm(request.POST, instance=note)
+    if request.is_ajax():
+        form = NoteForm(request.POST)
         if form.is_valid():
             note = form.save()
             messages.add_message(request, messages.INFO, "Note added")
             # return HttpResponseRedirect(reverse('notes:index'))
             # return JsonResponse({'title': note.title, 'body': note.body, 'timestamp': note.timestamp})
             return render(request, 'notes/note_entry.html', {'note': note})
-    else:
-        form = NoteForm(instance=note)
 
-    return render(request, 'notes/addnote.html', {'form': form, 'note': note})
 
-from forms import FolderForm
-
-def add_folder(request):
-    # A HTTP POST?
-    if request.method == 'POST':
-        form = FolderForm(request.POST)
-
-        # Have we been provided with a valid form?
-        if form.is_valid():
-            # Save the new category to the database.
-            form.save(commit=True)
-
-            # Now call the index() view.
-            # The user will be shown the homepage.
-            return HttpResponseRedirect(reverse('notes:index'))
-        else:
-            # The supplied form contained errors - just print them to the terminal.
-            print form.errors
-    else:
-        # If the request was not a POST, display the form to enter details.
-        form = FolderForm()
-
-    # Bad form (or form details), no form supplied...
-    # Render the form with error messages (if any).
-    return render(request, 'notes/addfolder.html', {'form': form})
+# from forms import FolderForm
+#
+# def add_folder(request):
+#     # A HTTP POST?
+#     if request.method == 'POST':
+#         form = FolderForm(request.POST)
+#
+#         # Have we been provided with a valid form?
+#         if form.is_valid():
+#             # Save the new category to the database.
+#             form.save(commit=True)
+#
+#             # Now call the index() view.
+#             # The user will be shown the homepage.
+#             return HttpResponseRedirect(reverse('notes:index'))
+#         else:
+#             # The supplied form contained errors - just print them to the terminal.
+#             print form.errors
+#     else:
+#         # If the request was not a POST, display the form to enter details.
+#         form = FolderForm()
+#
+#     # Bad form (or form details), no form supplied...
+#     # Render the form with error messages (if any).
+#     return render(request, 'notes/addfolder.html', {'form': form})
