@@ -18,7 +18,6 @@ function saveChanges() {
 }
 
 function getNote(thisRef) {
-
     var note_id = thisRef.attr("data-noteid");
     $.getJSON('/notes/note/', {note_id: note_id}, function (data) {
         $('.note-info').attr('id', note_id);
@@ -26,12 +25,20 @@ function getNote(thisRef) {
         $('.editor').html(data.body);
     })
 }
+
+function validateURL(textval) {
+    var urlregex = new RegExp( "^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
+    return urlregex.test(textval);
+}
+
 // inserts a new empty note
 function addNote() {
     var csrftoken = $.cookie('csrftoken');
+    var folder_id = 1;
     var data = {
         title: "New note",
         body: " ",
+        folder_id: folder_id,
         csrfmiddlewaretoken: $.cookie('csrftoken')
     };
 
@@ -54,9 +61,12 @@ $(document).ready(function () {
     // this creates a note as a new instance
     $('.btn-success').click(function () {
         var csrftoken = $.cookie('csrftoken');
+        //TODO get correct folder id
+        var folder_id = 1;
         var data = {
             title: "New note",
             body: " ",
+            folder_id: folder_id,
             csrfmiddlewaretoken: $.cookie('csrftoken')
         };
 
@@ -97,6 +107,6 @@ $(document).ready(function () {
         saveChanges()
     });
 
-
+    $('.editor').on('paste', function() {console.log(this)})
 });
 

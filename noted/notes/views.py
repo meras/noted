@@ -94,9 +94,12 @@ def delete_note(request):
 def add_note(request):
     if request.is_ajax():
         form = NoteForm(request.POST)
+        folder_id = request.POST.get('folder_id')
+        print folder_id
         if form.is_valid():
-            note = form.save()
-            messages.add_message(request, messages.INFO, "Note added")
+            note = form.save(commit=False)
+            note.folder = Folder.objects.get(pk=folder_id)
+            note.save()
             # return HttpResponseRedirect(reverse('notes:index'))
             # return JsonResponse({'title': note.title, 'body': note.body, 'timestamp': note.timestamp})
             return render(request, 'notes/note_entry.html', {'note': note})

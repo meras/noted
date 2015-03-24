@@ -9,11 +9,13 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col-sm-2 sidebar">
-                        <ul class="nav nav-sidebar">
+                        <ul class="nav nav-sidebar folder-list">
                             {% for folder in folders %}
-                                <li><a href="/notes/folder/{{ folder.slug }}">
-                                    {{ folder.title }}
-                                    <span class="sr-only">(current)</span></a>
+                                <li data-folderid="{{ folder.id }}">
+                                    <a class="folder" href="/notes/folder/{{ folder.slug }}">
+                                        {{ folder.title }}
+                                        <span class="sr-only">(current)</span>
+                                    </a>
                                 </li>
                             {% endfor %}
                         </ul>
@@ -22,7 +24,7 @@
                     <div class="col-sm-2 col-sm-offset-2 sidebar" id="notelist">
                         <div class="list-group">
                             {% for note in notes %}
-                                <a data-noteid="{{ note.id }}" href="#" class="list-group-item note">
+                                <a belongs-to="{{ note.folder }}" data-noteid="{{ note.id }}" href="#" class="list-group-item note">
                                     <div class="header">
                                         <strong class="primary-font">{{ note.title }}</strong>
                                         <small class="pull-right text-muted">
