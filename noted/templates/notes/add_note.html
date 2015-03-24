@@ -7,7 +7,7 @@
     </div>
 
     <div class='col-md-12'>
-        <form action="" method="post">{% csrf_token %}
+        <form id = "note_form"  method="post"  action="/notes/folder/{{folder_slug}}/add_note/">{% csrf_token %}
             {{form.as_p}}
             <input type='submit' value='New Note' class='btn btn-primary btn-lg btn-block' />
         </form>

@@ -1,8 +1,79 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block body %}
+{% load staticfiles %}
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-COMPATIBLE" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>{% block title %}noteD - The unsecure way to store your thoughts{% endblock title %}</title>
+    {% block stylesheets %}
+        <link rel="stylesheet" href="{% static 'noted/css/bootstrap.min.css' %}" />
+        <link rel="stylesheet" type="text/css" href="{% static 'noted/css/custom.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'noted/css/medium-editor.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'noted/css/medium.theme.flat.min.css' %}">
+    {% endblock stylesheets %}
+</head>
 
-    <div class="container-fluid">
+{% block scriptload %}
+    <script src="{% static 'noted/js/jquery-2.1.3.min.js' %}"></script>
+    <script src="{% static 'noted/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'noted/js/ajax.js' %}"></script>
+    <script src="{% static 'noted/js/medium-editor.min.js' %}"></script>
+{% endblock scriptload %}
+
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'home' %}">Home</a>
+            {% if user.is_authenticated %}
+            <a class="navbar-brand" href="{% url 'logout' %}">Logout</a>
+            {% endif %}
+        </div>
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                <li>
+                    <a href="{% url 'notes:index' %}">Notes</a>
+                </li>
+                <li>
+                    {% if thisFolder %}
+                    <a href="/notes/folder/{{ folder_slug }}/add_note/">Add note</a>
+                    {% else %}
+                           A folder by this name does not exist.
+                    {% endif %}
+                </li>
+                <li>
+                    <a href="{% url 'notes:addtag' %}">add tag</a>
+                </li>
+                <li>
+                    <a href="{% url 'notes:addfolder' %}">add folder</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{#{% if messages %}#}
+{#    <div class="container">#}
+{#        <ul class="messages">#}
+{#            {% for message in messages %}#}
+{#                <li id="message_{{ forloop.counter }}"#}
+{#                        {% if message.tags %} class="alert alert-{{message.tags}}"{% endif %}>#}
+{#                    {{message}}#}
+{#                </li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+{#    </div>#}
+{#{% endif %}#}
+<div class="container-fluid">
         <div class="row">
             <div class="col-sm-2 sidebar">
                 <ul class="nav nav-sidebar">
@@ -39,4 +110,29 @@
     <script>
         var editor = new MediumEditor('.main')
     </script>
-{% endblock body %}
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
