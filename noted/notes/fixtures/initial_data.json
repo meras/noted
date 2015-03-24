@@ -1,0 +1,93 @@
+[
+    {
+        "fields": {
+            "owner": 4,
+            "slug": "personal",
+            "title": "Personal"
+        },
+        "model": "notes.folder",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "owner": 4,
+            "slug": "university",
+            "title": "University"
+        },
+        "model": "notes.folder",
+        "pk": 12
+    },
+    {
+        "fields": {
+            "owner": 9,
+            "slug": "jobs",
+            "title": "Jobs"
+        },
+        "model": "notes.folder",
+        "pk": 13
+    },
+    {
+        "fields": {
+            "owner": 4,
+            "slug": "information-retrieval",
+            "title": "Information Retrieval"
+        },
+        "model": "notes.folder",
+        "pk": 14
+    },
+    {
+        "fields": {
+            "body": "Data Centres\r\nHuge amounts of processing power\r\nGoogle, Fb, Amazon - and JP as well\r\nGiant hardware warehouse\r\n\r\nRacks of servers\r\nStorage arrays\r\n\r\nIssues\r\nCooling infrastructure\r\nPower converters\r\nBackup generators - reliability is important\r\n\r\nWhere to build Data centres\r\nCheap power\r\nCheap real-estate\r\nCool climate with predictable weather\r\n\r\nModular Data Centres\r\nCheaper that paying for a warehouse upfront\r\n",
+            "timestamp": "2015-03-24T19:45:50.016Z",
+            "folder": 12,
+            "tags": [],
+            "title": "Cloud computing"
+        },
+        "model": "notes.note",
+        "pk": 11
+    },
+    {
+        "fields": {
+            "body": "Idea 1\r\nI need to focus, I get it through music I like \r\nInformation need: Music\r\nEmo/Cog need: Focus/concentration/attention\r\nHowever I can\u2019t remember the name of the artists (\u201cMade in Heights\u201d)\r\n10 years ago, I would have only had access to the records \r\nwhich I have at home. 5 years ago perhaps I wouldn\u2019t be able \r\nto type the lyrics of a track and immediately get its artist.\r\n\r\nWhat does this immediacy of information mean for our \r\ncognitive and emotional state or our expectations and perception \r\nof information?\r\nFor people born with search engines, would there be changes in behaviour if this immediacy was removed?\r\n\r\nIdea 2\r\nI spend a lot of time bookmarking things and organising and synthesising data\r\nis that better than simply \u201crefinding\u201d the information?",
+            "timestamp": "2015-03-24T19:46:41.472Z",
+            "folder": 14,
+            "tags": [],
+            "title": "IR research thoughts"
+        },
+        "model": "notes.note",
+        "pk": 12
+    },
+    {
+        "fields": {
+            "body": "Cohesion (worst to best)\r\nCoincidental - modules are unrelated\r\nLogical \r\nTemporal\r\nProcedural\r\nCommunicational\r\nSequential\r\nInformational\r\nFunctional\r\n\r\nCoupling (worst to best)\r\nContent\r\nControl\r\nCommon / Global Data\r\nStamp / Data-structure\r\nData\r\nNo data coupling",
+            "timestamp": "2015-03-24T19:47:36.607Z",
+            "folder": 12,
+            "tags": [],
+            "title": "Cohesion and Coupling"
+        },
+        "model": "notes.note",
+        "pk": 13
+    },
+    {
+        "fields": {
+            "body": "\r\nhttp://automattic.com/work-with-us/\r\nhttp://en.wikipedia.org/wiki/Matt_Mullenweg\r\nhttp://ma.tt/about/\r\nhttp://www.crunchbase.com/person/matt-mullenweg\r\nhttp://wordpress.tv/speakers/matt-mullenweg/\r\nhttp://www.fastcolabs.com/3035463/how-matts-machine-works",
+            "timestamp": "2015-03-24T19:48:32.040Z",
+            "folder": 11,
+            "tags": [],
+            "title": "Matt Mullenweg"
+        },
+        "model": "notes.note",
+        "pk": 14
+    },
+    {
+        "fields": {
+            "body": "White et al. 2006      - implicit RF\r\nArapakis et al. 2008 - affective feedback\r\nArapakis et al. 2009 - multimodal recommender systems\r\nArapakis et al. 2009 - general vs personalized affective models\r\nJoho et al. 2010       - personal highlights",
+            "timestamp": "2015-03-24T19:48:58.232Z",
+            "folder": 14,
+            "tags": [],
+            "title": "Paper refresher"
+        },
+        "model": "notes.note",
+        "pk": 15
+    }
+]
