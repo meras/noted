@@ -26,19 +26,27 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-
 # Application definition
 
-INSTALLED_APPS = (
+DEFAULT_APPS = (
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'notes',
+)
+
+THIRD_PARTY_APPS = (
+    'bootstrap3',
     'registration',
 )
+
+LOCAL_APPS = (
+    'notes',
+)
+
+INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 #COOOOOKIES!
 MIDDLEWARE_CLASSES = (
@@ -86,6 +94,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = '/var/www/meras/static'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
+
+# This is some sort of caching magic
+TEMPLATE_LOADERS = (
+    ('django.template.loaders.cached.Loader', (
+        'django.template.loaders.filesystem.Loader',
+        'django.template.loaders.app_directories.Loader',
+    )),
+)
+
 
 # Registratio Redux
 REGISTRATION_OPEN = True         # If True, users can register

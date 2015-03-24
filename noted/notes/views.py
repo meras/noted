@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from models import Note, Tag
 from forms import NoteForm, TagForm
 from django.utils.text import slugify
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from django.utils.html import strip_tags
@@ -19,6 +19,11 @@ def index_view(request):
 
 @login_required
 def add_tag(request):
+    """
+
+    :param request:
+    :return:
+    """
     id = request.GET.get('id', None)
     if id is not None:
         tag = get_object_or_404(Tag, id=id)
@@ -41,8 +46,13 @@ def add_tag(request):
         form = TagForm(instance=tag)
     return render(request, 'notes/addtag.html', {'form': form, 'tag': tag})
 
-@login_required
+
 def note_content(request):
+    """
+
+    :param request:
+    :return:
+    """
     note_id = None
     if request.method == 'GET':
         note_id = request.GET['note_id']
@@ -108,3 +118,29 @@ def add_note(request):
         form = NoteForm(instance=note)
 
     return render(request, 'notes/addnote.html', {'form': form, 'note': note})
+
+from forms import FolderForm
+
+def add_folder(request):
+    # A HTTP POST?
+    if request.method == 'POST':
+        form = FolderForm(request.POST)
+
+        # Have we been provided with a valid form?
+        if form.is_valid():
+            # Save the new category to the database.
+            form.save(commit=True)
+
+            # Now call the index() view.
+            # The user will be shown the homepage.
+            return HttpResponseRedirect(reverse('notes:index'))
+        else:
+            # The supplied form contained errors - just print them to the terminal.
+            print form.errors
+    else:
+        # If the request was not a POST, display the form to enter details.
+        form = FolderForm()
+
+    # Bad form (or form details), no form supplied...
+    # Render the form with error messages (if any).
+    return render(request, 'notes/addfolder.html', {'form': form})

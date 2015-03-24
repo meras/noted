@@ -1,10 +1,12 @@
 from django import forms
-from notes.models import Note, Tag, Folder
+from models import Note, Tag, Folder
+
 
 class NoteForm(forms.ModelForm):
     """
 
     """
+
     class Meta:
         model = Note
         fields = ('title', 'body', 'tags')
@@ -15,7 +17,8 @@ class TagForm(forms.ModelForm):
         model = Tag
         fields = ('label',)
 
+
 class FolderForm(forms.ModelForm):
     class Meta:
         model = Folder
-        fields = ('title', 'note')
+        fields = ('title', )
