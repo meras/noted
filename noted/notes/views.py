@@ -5,7 +5,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from models import Note, Tag
 from forms import NoteForm, TagForm
 from django.utils.text import slugify
-from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 
 
@@ -14,8 +14,13 @@ def index_view(request):
     tags = Tag.objects.all()
     return render(request, 'notes/index.html', {'notes': notes, 'tags': tags})
 
-
+@login_required()
 def add_tag(request):
+    """
+
+    :param request:
+    :return:
+    """
     id = request.GET.get('id', None)
     if id is not None:
         tag = get_object_or_404(Tag, id=id)
@@ -40,6 +45,11 @@ def add_tag(request):
 
 
 def note_content(request):
+    """
+
+    :param request:
+    :return:
+    """
     note_id = None
     if request.method == 'GET':
         note_id = request.GET['note_id']
@@ -50,7 +60,7 @@ def note_content(request):
 
     return JsonResponse({'title': note.title, 'body': note.body})
 
-
+@login_required()
 def add_note(request):
     id = request.GET.get('id', None)
     if id is not None:

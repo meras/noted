@@ -39,17 +39,17 @@ class Tag(models.Model):
         return self.label
 
 
-class Folder(models.Model):
-    """
-    Each user account contains at least one Folder.
-    Folders are used to organize collections of Notes.
-    Each notebook has a name, which must be unique within the
-    owner's account. Folders can be grouped into stacks, which
-    contain one or more notebooks, but cannot directly contain notes.
-    """
-    title = models.CharField(max_length=50)
-    owner = models.ForeignKey(User, default=0)
-    note = models.ManyToManyField(Note)
-
-    def __unicode__(self):
-        return self.title
+# class Folder(models.Model):
+#     """
+#     Each user account contains at least one Folder.
+#     Folders are used to organize collections of Notes.
+#     Each notebook has a name, which must be unique within the
+#     owner's account. Folders can be grouped into stacks, which
+#     contain one or more notebooks, but cannot directly contain notes.
+#     """
+#     title = models.CharField(max_length=50)
+#     owner = models.ForeignKey(User, default=0)
+#     note = models.ManyToManyField(Note)
+#
+#     def __unicode__(self):
+#         return self.title
