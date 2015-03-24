@@ -12,7 +12,7 @@
         <link rel="stylesheet" href="{% static 'noted/css/bootstrap.min.css' %}" />
         <link rel="stylesheet" type="text/css" href="{% static 'noted/css/custom.css' %}">
         <link rel="stylesheet" type="text/css" href="{% static 'noted/css/medium-editor.min.css' %}">
-        <link rel="stylesheet" type="text/css" href="{% static 'noted/css/medium.theme.flat.min.css' %}">
+        <link rel="stylesheet" type="text/css" href="{% static 'noted/css/medium.theme.default.min.css' %}">
     {% endblock stylesheets %}
     {% block css %}
     {% endblock %}
@@ -81,12 +81,6 @@
                         </li>
                         <li>
                             <a href="{% url 'auth_logout' %}?next=/">Sign out</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'notes:addnote' %}">Add note</a>
-                        </li>
-                        <li>
-                            <a href="{% url 'notes:addtag' %}">Add tag</a>
                         </li>
                     {% else %}
                         <li>

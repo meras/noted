@@ -2,18 +2,19 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from models import Note, Tag
+from models import *
 from forms import NoteForm, TagForm
 from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils.html import strip_tags
 
-
+@login_required()
 def index_view(request):
     notes = Note.objects.all().order_by('-timestamp')
+    folders = Folder.objects.all()
     tags = Tag.objects.all()
-    return render(request, 'notes/index.html', {'notes': notes, 'tags': tags})
+    return render(request, 'notes/index.html', {'notes': notes, 'tags': tags, 'folders': folders})
 
 
 @login_required
@@ -101,28 +102,59 @@ def add_note(request):
             return render(request, 'notes/note_entry.html', {'note': note})
 
 
-# from forms import FolderForm
-#
-# def add_folder(request):
-#     # A HTTP POST?
-#     if request.method == 'POST':
-#         form = FolderForm(request.POST)
-#
-#         # Have we been provided with a valid form?
-#         if form.is_valid():
-#             # Save the new category to the database.
-#             form.save(commit=True)
-#
-#             # Now call the index() view.
-#             # The user will be shown the homepage.
-#             return HttpResponseRedirect(reverse('notes:index'))
-#         else:
-#             # The supplied form contained errors - just print them to the terminal.
-#             print form.errors
-#     else:
-#         # If the request was not a POST, display the form to enter details.
-#         form = FolderForm()
-#
-#     # Bad form (or form details), no form supplied...
-#     # Render the form with error messages (if any).
-#     return render(request, 'notes/addfolder.html', {'form': form})
+from forms import FolderForm
+
+@login_required()
+def add_folder(request):
+    id = request.GET.get('id', None)
+    if id is not None:
+        folder = get_object_or_404(Folder, id=id)
+    else:
+        folder = None
+
+    if request.method =='POST':
+        if request.POST.get('control') == 'delete':
+            folder.delete()
+            messages.add_message(request, messages.INFO, "Folder deleted")
+            return HttpResponseRedirect(reverse('notes:index'))
+
+        form = FolderForm(request.POST, instance=folder)
+        if form.is_valid():
+            form.save()
+            messages.add_message(request, messages.INFO, "Folder added")
+            return HttpResponseRedirect(reverse('notes:index'))
+    else:
+        form = FolderForm(instance=folder)
+
+    return render(request, 'notes/addfolder.html', {'form':form, 'folder':folder})
+
+
+def folder(request, folder_title_slug):
+    print "B<MNB<NBM<MNB"
+    # Create a context dictionary which we can pass to the template rendering engine.
+    context_dict = {}
+
+    try:
+        # Can we find a category name slug with the given name?
+        # If we can't, the .get() method raises a DoesNotExist exception.
+        # So the .get() method returns one model instance or raises an exception.
+        folder = Folder.objects.get(slug=folder_title_slug)
+        folders = Folder.objects.all()
+        context_dict['thisFolder'] = folder
+        context_dict['folders'] = folders
+        # Retrieve all of the associated pages.
+        # Note that filter returns >= 1 model instance.
+        notes = Note.objects.filter(folder=folder)
+
+        # Adds our results list to the template context under name pages.
+        context_dict['notes'] = notes
+        context_dict['folder_slug'] = folder_title_slug
+        # We also add the category object from the database to the context dictionary.
+        # We'll use this in the template to verify that the category exists.
+    except Folder.DoesNotExist:
+        # We get here if we didn't find the specified category.
+        # Don't do anything - the template displays the "no category" message for us.
+        pass
+
+    # Go render the response and return it to the client.
+    return render(request, 'notes/index.html', context_dict)

@@ -19,10 +19,12 @@ def populate():
 
     text = ''
     for i in range(0,20):
-        text += ' '.join(fake.paragraphs())
+        text += '<h2>' + fake.word() + '</h2>'
+        text += '<p>'.join(fake.paragraphs())
+        text += '</p>'
 
     note = add_note(title=fake.company(),
-                    author = user,
+                    #author = user,
                     folder = folder,
                     timestamp=fake.date_time_this_year(),
                     body= text, tags=28)
@@ -51,7 +53,7 @@ def add_user(username, first_name, email, password, is_active):
     return u
 
 
-def add_note(title, author, folder, timestamp, body, tags):
+def add_note(title, folder, timestamp, body, tags):
     """
 
     :param title: string
@@ -60,7 +62,7 @@ def add_note(title, author, folder, timestamp, body, tags):
     :param tags: a list? of Tag Objects?
     :return:
     """
-    n = Note.objects.get_or_create(title=title, author= author,folder = folder,timestamp=timestamp, body=body)[0]
+    n = Note.objects.get_or_create(title=title,folder = folder,timestamp=timestamp, body=body)[0]
     return n
 
 

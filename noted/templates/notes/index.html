@@ -6,67 +6,59 @@
             {#    <script>$('#mango').css("background-image", "url(http://i.imgur.com/RDBMPs9.jpg",);  </script>#}
             <h1>You have no notes</h1>
         {% else %}
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-2 sidebar">
-                <ul class="nav nav-sidebar">
-                    <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-                    <li><a href="#">Reports</a></li>
-                    <li><a href="#">Analytics</a></li>
-                    <li><a href="#">Export</a></li>
-                </ul>
-                <ul class="nav nav-sidebar">
-                    <li><a href="">Nav item again</a></li>
-                    <li><a href="">One more nav</a></li>
-                    <li><a href="">Another nav item</a></li>
-                    <li><a href="">More navigation</a></li>
-                </ul>
-                <ul class="nav nav-sidebar">
-                    <li><a href="">Nav item again</a></li>
-                    <li><a href="">One more nav</a></li>
-                    <li><a href="">Another nav item</a></li>
-                </ul>
-            </div>
-            {# sidepanel with the list of notes#}
-            <div class="col-sm-2 col-sm-offset-2 sidebar" id="notelist">
-                <div class="list-group">
-                    {% for note in notes %}
-                        <a data-noteid="{{ note.id }}" href="#" class="list-group-item note" >
-                            <div class="header">
-                                <strong class="primary-font">{{note.title}}</strong>
-                                <small class="pull-right text-muted">
-                                    <span class="glyphicon glyphicon-time"></span>{{  note.timestamp|date:"M j" }}</small>
-                            </div>
-                            <p>
-                                <small class="preview">
-                                    {{ note.body|slice:":80"|striptags }}
-                                </small>
-                            </p>
-                        </a>
-                    {% endfor %}
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-2 sidebar">
+                        <ul class="nav nav-sidebar">
+                            {% for folder in folders %}
+                                <li><a href="/notes/folder/{{ folder.slug }}">
+                                    {{ folder.title }}
+                                    <span class="sr-only">(current)</span></a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {# sidepanel with the list of notes#}
+                    <div class="col-sm-2 col-sm-offset-2 sidebar" id="notelist">
+                        <div class="list-group">
+                            {% for note in notes %}
+                                <a data-noteid="{{ note.id }}" href="#" class="list-group-item note">
+                                    <div class="header">
+                                        <strong class="primary-font">{{ note.title }}</strong>
+                                        <small class="pull-right text-muted">
+                                            <span class="glyphicon glyphicon-time"></span>{{ note.timestamp|date:"M j" }}
+                                        </small>
+                                    </div>
+                                    <p>
+                                        <small class="preview">
+                                            {{ note.body|slice:":80"|striptags }}
+                                        </small>
+                                    </p>
+                                </a>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <div class="col-sm-8 col-sm-offset-4 main">
+                        <div class="note-info" id="">
+                            <section class="h2">{{ notes.first.title }}</section>
+                            <button type="button" class="btn btn-success">New</button>
+                            <button type="button" class="btn btn-info">Save</button>
+                            <button type="button" class="btn btn-danger">Delete</button>
+                        </div>
+                        <div class="editor">
+                            {{ notes.first.body|safe }}
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="col-sm-8 col-sm-offset-4 main">
-                <div class="note-info" id="">
-                    <section class="h2">{{ notes.first.title }}</section>
-                    <button type="button" class="btn btn-success">New</button>
-                    <button type="button" class="btn btn-info">Save</button>
-                    <button type="button" class="btn btn-danger">Delete</button>
-                </div>
-                <div class="editor">
-                    {{ notes.first.body|safe }}
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <script>
-        var editor = new MediumEditor('.editor'),
-                title = new MediumEditor('.note-info>section', {
-                    disableToolbar: true,
-                    disableReturn: true
-                });
-    </script>
-  </div>
- {% endif %}
+            <script>
+                var editor = new MediumEditor('.editor'),
+                        title = new MediumEditor('.note-info>section', {
+                            disableToolbar: true,
+                            disableReturn: true
+                        });
+            </script>
+            </div>
+        {% endif %}
 {% endblock body %}
