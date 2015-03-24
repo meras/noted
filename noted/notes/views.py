@@ -133,7 +133,6 @@ def add_folder(request):
 
 
 def folder(request, folder_title_slug):
-    print "B<MNB<NBM<MNB"
     # Create a context dictionary which we can pass to the template rendering engine.
     context_dict = {}
 
