@@ -12,7 +12,7 @@ from django.utils.html import strip_tags
 @login_required()
 def index_view(request):
     notes = Note.objects.all().order_by('-timestamp')
-    folders = Folder.objects.all()
+    folders = Folder.objects.all().order_by('-id')
     tags = Tag.objects.all()
     return render(request, 'notes/index.html', {'notes': notes, 'tags': tags, 'folders': folders})
 
@@ -132,7 +132,7 @@ def add_folder(request):
 
 
 def folder(request, folder_title_slug):
-    # Create a c ontext dictionary which we can pass to the template rendering engine.
+    # Create a context dictionary which we can pass to the template rendering engine.
     context_dict = {}
 
     try:
@@ -153,9 +153,8 @@ def folder(request, folder_title_slug):
         # We also add the category object from the database to the context dictionary.
         # We'll use this in the template to verify that the category exists.
     except Folder.DoesNotExist:
-        # We get here if we didn't find the specified category.
-        # Don't do anything - the template displays the "no category" message for us.
-        pass
+        # We get here if we didn't find the specified Folder.
+        return HttpResponse("Folder does not exist")
 
     # Go render the response and return it to the client.
     return render(request, 'notes/index.html', context_dict)
