@@ -7,9 +7,13 @@
             <h1>You have no notes</h1>
             <button type="button" class="btn btn-success">New</button>
         {% else %}
+
             <div class="container-fluid">
                 <div class="row">
+
+                    {#######      NOTE CONTENT      #######}
                     <div class="col-sm-2 sidebar">
+
                         <ul class="nav nav-sidebar folder-list">
                             {% for folder in folders %}
                                 <li data-folderid="{{ folder.id }}">
@@ -21,44 +25,96 @@
                             {% endfor %}
                         </ul>
                     </div>
-                    {# sidepanel with the list of notes#}
+
+                    {#######      MIDDLE SIDEBAR      #######}
                     <div class="col-sm-2 col-sm-offset-2 sidebar" id="notelist">
-                        <!-- /input-group -->
-                        <div class="list-group">
-                            {% for note in notes %}
-                                <a belongs-to="{{ note.folder }}" data-noteid="{{ note.id }}" href="#"
-                                   class="list-group-item note">
-                                    <div class="header">
-                                        <strong class="primary-font" data-placeholder="">{{ note.title }}</strong>
-                                        <small class="pull-right text-muted">
-                                            <span class="glyphicon glyphicon-time"></span>{{ note.timestamp|date:"M j" }}
-                                        </small>
-                                    </div>
-                                    <p>
-                                        <small class="preview">
-                                            {{ note.body|slice:":80"|striptags }}
-                                        </small>
-                                    </p>
-                                </a>
-                            {% endfor %}
+                        <div class="btn-group center-block" role="group" aria-label="Contextual buttons">
+                            {#######      NEW NOTE      #######}
+                            <button id="new" type="button" class="btn btn-info">
+                                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
+                            {#######      SAVE NOTE      #######}
+                            <button id="save" type="button" class="btn btn-success">
+                                <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+                            </button>
+
+                        </div>
+
+                        {#######      SEARCH      #######}
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Search for...">
+{#                            <span class="input-group-btn">#}
+{#                            <button class="btn btn-default" type="button">#}
+{#                                <span class="glyphicon glyphicon-search"></span>#}
+{#                            </button>#}
+{#                            </span>#}
+                        </div>
+
+                        {#######      NOTE LIST      #######}
+                        <div>
+                            <!-- /input-group -->
+                            <div class="list-group">
+                                {% for note in notes %}
+                                    <a belongs-to="{{ note.folder }}" data-noteid="{{ note.id }}" href="#"
+                                       class="list-group-item note">
+                                        <div class="header">
+                                            <strong class="primary-font"
+                                                    data-placeholder="">{{ note.title }}</strong>
+                                            <small class="pull-right text-muted">
+                                                <span class="glyphicon glyphicon-time"></span>
+                                                {{ note.timestamp|date:"M j" }}
+                                            </small>
+                                        </div>
+                                        <p>
+                                            <small class="preview">
+                                                {{ note.body|slice:":40"|striptags }}
+                                            </small>
+                                        </p>
+                                    </a>
+                                {% endfor %}
+                            </div>
                         </div>
                     </div>
-                    <div class="col-sm-8 col-sm-offset-4 main">
-                        <div class="note-info" id="">
+
+                </div>
+                {#######      NOTE CONTENT      #######}
+
+                <div class="note-content col-sm-6 col-sm-offset-5 main">
+                        <div class="note-info">
                             <section class="h2">{{ notes.first.title }}</section>
-                        </div>
-                        <div class="btn-group" role="group" aria-label="Contextual buttons">
-                            <button type="button" class="btn btn-default" id="new">New</button>
-                            <button type="button" class="btn btn-default" id="save">Save</button>
-                            <button type="button" class="btn btn-default" id="delete">Delete</button>
-                            <small class="pull-right text-muted" id="count">
-                                ...
-                            </small>
-                        </div>
+                            <div class="btn-toolbar" role="toolbar" aria-label="...">
+                                <div id="star" class="btn-group" role="group" aria-label="...">
+                                <span style="font-size:1.5em;"
+                                      class="text-muted glyphicon glyphicon-star-empty"></span>
+                                </div>
+                                <div id="delete" class="btn-group" role="group" aria-label="...">
+                                <span style="font-size:1.5em;"
+                                      class="text-muted glyphicon glyphicon-trash"></span>
+                                </div>
+                                <div id="night" class="btn-group" role="group" aria-label="...">
+                                <span style="font-size:1.5em;"
+                                      class="text-muted glyphicon glyphicon-font img-circle"> </span>
+                                </div>
+                                <div id="full" class="btn-group" role="group" aria-label="...">
+                                 <span style="font-size:1.5em;"
+                                       class="text-muted glyphicon glyphicon-resize-full"></span>
+                                </div>
+                            </div>
+
+                        <br><br>
 
                         <div class="editor">
                             {{ notes.first.body|safe }}
                         </div>
+
+                        <br><br>
+
+                        <small class="tags pull-left text-muted">
+                            {% for tag in tags %}
+                                {{ tag }}
+                            {% endfor %}
+                        </small>
+
                     </div>
                 </div>
             </div>
@@ -72,28 +128,27 @@
                             placeholder: 'Untitled note...',
                             disableToolbar: true,
                             disableReturn: true
+                        }),
+                        tags = new MediumEditor('.tags', {
+                            placeholder: 'Click to add tags...',
+                            disableToolbar: true,
+                            disableReturn: true
                         });
 
-                function wordCount(val) {
-                    return {
-                        charactersNoSpaces: val.replace(/\s+/g, '').length,
-                        characters: val.length,
-                        words: val.match(/\S+/g).length,
-                        lines: val.split(/\r*\n/).length
-                    }
-                }
-
-
-                var count = $('#count');
-
-                $('.editor').on('input', function () {
-
-                    var c = wordCount(this.value);
-
-                    count.val(
-                                    "Count: " + c.words);
-
+                $(function () {
+                    $("#full").click(function () {
+                        $(".row").toggle(1000);
+                        $(".topnav").slideToggle(1400);
+                    });
+                    $('#night').click(function () {
+                        $('.note-content').css({
+                            'background-color': '#554F48',
+                            'color': '#FFFFFF'
+                        });
+                    });
                 });
+
+
             </script>
             </div>
         {% endif %}
