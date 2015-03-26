@@ -2,11 +2,11 @@
 {% load static %}
 {% block body %}
     <div id="sunset">
-        {% if not notes %}
+{#        {% if notes %}#}
             {#    <script>$('#mango').css("background-image", "url(http://i.imgur.com/RDBMPs9.jpg",);  </script>#}
-            <h1>You have no notes</h1>
-            <button type="button" class="btn btn-success">New</button>
-        {% else %}
+{#            <h1>You have no notes</h1>#}
+{#            <button type="button" class="btn btn-success">New</button>#}
+{#        {% else %}#}
 
             <div class="container-fluid">
                 <div class="row">
@@ -17,7 +17,7 @@
                         <ul class="nav nav-sidebar folder-list">
                             {% for folder in folders %}
                                 <li data-folderid="{{ folder.id }}">
-                                    <a class="folder" href="/notes/folder/{{ folder.slug }}">
+                                        <a class="folder" href="{% url 'notes:folder'  folder.slug %}">
                                         {{ folder.title }}
                                         <span class="sr-only">(current)</span>
                                     </a>
@@ -28,10 +28,13 @@
 
                     {#######      MIDDLE SIDEBAR      #######}
                     <div class="col-sm-2 col-sm-offset-2 sidebar" id="notelist">
-                        <div class="btn-group center-block" role="group" aria-label="Contextual buttons">
+                        <div class="" aria-label="Contextual buttons">
                             {#######      NEW NOTE      #######}
                             <button id="new" type="button" class="btn btn-info">
                                 <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                            </button>
+                            <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top"
+                                    title="Tooltip on top">Tooltip on top
                             </button>
                             {#######      SAVE NOTE      #######}
                             <button id="save" type="button" class="btn btn-success">
@@ -43,11 +46,11 @@
                         {#######      SEARCH      #######}
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Search for...">
-{#                            <span class="input-group-btn">#}
-{#                            <button class="btn btn-default" type="button">#}
-{#                                <span class="glyphicon glyphicon-search"></span>#}
-{#                            </button>#}
-{#                            </span>#}
+                            {#                            <span class="input-group-btn">#}
+                            {#                            <button class="btn btn-default" type="button">#}
+                            {#                                <span class="glyphicon glyphicon-search"></span>#}
+                            {#                            </button>#}
+                            {#                            </span>#}
                         </div>
 
                         {#######      NOTE LIST      #######}
@@ -80,26 +83,26 @@
                 {#######      NOTE CONTENT      #######}
 
                 <div class="note-content col-sm-6 col-sm-offset-5 main">
-                        <div class="note-info">
-                            <section class="h2">{{ notes.first.title }}</section>
-                            <div class="btn-toolbar" role="toolbar" aria-label="...">
-                                <div id="star" class="btn-group" role="group" aria-label="...">
+                    <div class="note-info">
+                        <section class="h2">{{ notes.first.title }}</section>
+                        <div class="btn-toolbar" role="toolbar" aria-label="...">
+                            <div id="star" class="btn-group" role="group" aria-label="...">
                                 <span style="font-size:1.5em;"
                                       class="text-muted glyphicon glyphicon-star-empty"></span>
-                                </div>
-                                <div id="delete" class="btn-group" role="group" aria-label="...">
+                            </div>
+                            <div id="delete" class="btn-group" role="group" aria-label="...">
                                 <span style="font-size:1.5em;"
                                       class="text-muted glyphicon glyphicon-trash"></span>
-                                </div>
-                                <div id="night" class="btn-group" role="group" aria-label="...">
+                            </div>
+                            <div id="night" class="btn-group" role="group" aria-label="...">
                                 <span style="font-size:1.5em;"
                                       class="text-muted glyphicon glyphicon-font img-circle"> </span>
-                                </div>
-                                <div id="full" class="btn-group" role="group" aria-label="...">
+                            </div>
+                            <div id="full" class="btn-group" role="group" aria-label="...">
                                  <span style="font-size:1.5em;"
                                        class="text-muted glyphicon glyphicon-resize-full"></span>
-                                </div>
                             </div>
+                        </div>
 
                         <br><br>
 
@@ -139,6 +142,10 @@
                     $("#full").click(function () {
                         $(".row").toggle(1000);
                         $(".topnav").slideToggle(1400);
+                        $('col-sm-6').css({
+                            'height': '100%',
+                            'width': '100%'
+                        });
                     });
                     $('#night').click(function () {
                         $('.note-content').css({
@@ -148,8 +155,10 @@
                     });
                 });
 
+                $(function () {
+                    $('[data-toggle="tooltip"]').tooltip()
+                });
 
             </script>
             </div>
-        {% endif %}
 {% endblock body %}

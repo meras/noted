@@ -149,7 +149,7 @@ def folder(request, folder_title_slug):
 
         # Adds our results list to the template context under name pages.
         context_dict['notes'] = notes
-        context_dict['folder_slug'] = folder_title_slug
+        context_dict['folder_title_slug'] = folder_title_slug
         # We also add the category object from the database to the context dictionary.
         # We'll use this in the template to verify that the category exists.
     except Folder.DoesNotExist:
