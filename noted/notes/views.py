@@ -9,12 +9,21 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils.html import strip_tags
 
+
 @login_required()
 def index_view(request):
+    context_dict = {}
+
     notes = Note.objects.all().order_by('-timestamp')
+    #notes = notes.filter(author=request.user)
     folders = Folder.objects.all().order_by('-id')
     tags = Tag.objects.all()
-    return render(request, 'notes/index.html', {'notes': notes, 'tags': tags, 'folders': folders})
+
+    context_dict['notes'] = notes
+    context_dict['tags'] = tags
+    context_dict['folders'] = folders
+
+    return render(request, 'notes/index.html', context_dict)
 
 
 @login_required
@@ -24,17 +33,21 @@ def add_tag(request):
     :param request:
     :return:
     """
-    id = request.GET.get('id', None)
-    if id is not None:
-        tag = get_object_or_404(Tag, id=id)
+
+    uid = request.GET.get('id', None)
+    if uid is not None:
+        tag = get_object_or_404(Tag, id=uid)
     else:
         tag = None
 
     if request.method == 'POST':
+        # Deleting a Tag
         if request.POST.get('control') == 'delete':
             tag.delete()
             messages.add_message(request, messages.INFO, 'Tag deleted')
             return HttpResponseRedirect(reverse('notes:index'))
+
+        # Generate form
         form = TagForm(request.POST, instance=tag)
         if form.is_valid():
             t = form.save(commit=False)
@@ -44,7 +57,10 @@ def add_tag(request):
             return HttpResponseRedirect(reverse('notes:index'))
     else:
         form = TagForm(instance=tag)
-    return render(request, 'notes/addtag.html', {'form': form, 'tag': tag})
+
+    context_dict = {'form': form, 'tag': tag}
+
+    return render(request, 'notes/addtag.html', context_dict)
 
 
 def note_content(request):
@@ -73,7 +89,7 @@ def edit_note(request):
         if form.is_valid():
             note = form.save()
             messages.add_message(request, messages.INFO, "Note added")
-            #return JsonResponse({'title': note.title,'preview': strip_tags(note.body[:80])})
+            # return JsonResponse({'title': note.title,'preview': strip_tags(note.body[:80])})
             return render(request, 'notes/note_entry.html', {'note': note})
 
 
@@ -106,6 +122,7 @@ def add_note(request):
 
 from forms import FolderForm
 
+
 @login_required()
 def add_folder(request):
     id = request.GET.get('id', None)
@@ -114,7 +131,7 @@ def add_folder(request):
     else:
         folder = None
 
-    if request.method =='POST':
+    if request.method == 'POST':
         if request.POST.get('control') == 'delete':
             folder.delete()
             messages.add_message(request, messages.INFO, "Folder deleted")
@@ -128,7 +145,7 @@ def add_folder(request):
     else:
         form = FolderForm(instance=folder)
 
-    return render(request, 'notes/addfolder.html', {'form':form, 'folder':folder})
+    return render(request, 'notes/addfolder.html', {'form': form, 'folder': folder})
 
 
 def folder(request, folder_title_slug):
@@ -145,7 +162,7 @@ def folder(request, folder_title_slug):
         context_dict['folders'] = folders
         # Retrieve all of the associated pages.
         # Note that filter returns >= 1 model instance.
-        notes = Note.objects.filter(folder=folder)
+        notes = Note.objects.all().filter(folder=folder)
 
         # Adds our results list to the template context under name pages.
         context_dict['notes'] = notes
