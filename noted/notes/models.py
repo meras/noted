@@ -35,7 +35,7 @@ class Note(models.Model):
     If the note is copied, a new note is created. If the new note is edited, the original will not be changed.
     """
     title = models.CharField(max_length=200)
-    #author = models.ForeignKey(User)
+    #author = models.ForeignKey(User, default=0)
     body = models.TextField()
     folder = models.ForeignKey(Folder)
     timestamp = models.DateTimeField(auto_now_add=True)
