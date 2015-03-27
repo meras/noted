@@ -1,10 +1,85 @@
-<!DOCTYPE html>
-<html>
-<head lang="en">
-    <meta charset="UTF-8">
-    <title></title>
-</head>
-<body>
+{% load staticfiles %}
+<div class="note-content col-sm-6 col-sm-offset-5 main">
+    <div class="note-info">
+        <section class="h2">{{ notes.first.title }}</section>
+        <div class="btn-group-" role="toolbar" aria-label="...">
+            <div id="star" class="btn-group" role="group" aria-label="...">
+                                <span style="font-size:1.5em;"
+                                      class="text-muted glyphicon glyphicon-star-empty"></span>
+            </div>
+            <div id="delete" class="btn-group" role="group" aria-label="...">
+                                <span style="font-size:1.5em;"
+                                      class="text-muted glyphicon glyphicon-trash"></span>
+            </div>
+            <div id="night" class="btn-group" role="group" aria-label="...">
+                                <span style="font-size:1.5em;"
+                                      class="text-muted glyphicon glyphicon-font img-circle"> </span>
+            </div>
+            <div id="full" class="btn-group" role="group" aria-label="...">
+                                 <span style="font-size:1.5em;"
+                                       class="text-muted glyphicon glyphicon-resize-full"></span>
+            </div>
+        </div>
 
-</body>
-</html>
+        <br><br>
+
+        <div class="editor">
+            {{ notes.first.body|safe }}
+        </div>
+
+        <br><br>
+
+        <small class="tags pull-left text-muted">
+            {% for tag in tags %}
+                {{ tag }}
+            {% endfor %}
+        </small>
+
+        <small class="word-count">
+
+        </small>
+
+    </div>
+</div>
+<script src="{% static 'noted/js/word.count.js' %}"></script>
+
+        <script>
+            var editor = new MediumEditor('.editor', {
+                        buttons: ['bold', 'italic', 'header1', 'header2', 'anchor', 'unorderedlist', 'orderedlist'],
+                        cleanPastedHTML: false
+                    }),
+                    title = new MediumEditor('.note-info>section', {
+                        placeholder: 'Untitled note...',
+                        disableToolbar: true,
+                        disableReturn: true
+                    }),
+                    tags = new MediumEditor('.tags', {
+                        placeholder: 'Click to add tags...',
+                        disableToolbar: true,
+                        disableReturn: true
+                    });
+
+
+
+            {#            $(function () {#}
+            {#                $("#full").click(function () {#}
+            {#                    $(".row").toggle(1000);#}
+            {#                    $(".topnav").slideToggle(1400);#}
+            {#                    $('col-sm-6').css({#}
+            {#                        'height': '100%',#}
+            {#                        'width': '100%'#}
+            {#                    });#}
+            {#                });#}
+            {#                $('#night').click(function () {#}
+            {#                    $('.note-content').css({#}
+            {#                        'background-color': '#554F48',#}
+            {#                        'color': '#FFFFFF'#}
+            {#                    });#}
+            {#                });#}
+            {#            });#}
+
+            $(function () {
+                $('[data-toggle="tooltip"]').tooltip()
+            });
+
+        </script>
