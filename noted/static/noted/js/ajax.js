@@ -2,7 +2,7 @@
 function saveChanges() {
     var note_id = $('.note-info').attr('id');
     var csrftoken = $.cookie('csrftoken');
-    var note_title = $('.note-info > section').text();
+    var note_title = $('.title').text();
     var note_content = $('.editor').html();
     var data = {
         id: note_id,
@@ -21,7 +21,7 @@ function getNote(thisRef) {
     var note_id = thisRef.attr("data-noteid");
     $.getJSON('/notes/note/', {note_id: note_id}, function (data) {
         $('.note-info').attr('id', note_id);
-        $('.note-info > section').html(data.title);
+        $('.title').html(data.title);
         $('.editor').html(data.body);
     })
 }
@@ -87,9 +87,9 @@ $(document).ready(function () {
 
 
     //delete an existing note
-    $('#delete').click(function () {
+    $('.delete').click(function () {
         var note_id = $('.note-info').attr('id');
-        var note_title = $('.note-info > section').html();
+        var note_title = $('.title').html();
         var csrftoken = $.cookie('csrftoken');
         var data = {
             id: note_id,
@@ -103,7 +103,12 @@ $(document).ready(function () {
             data: data,
             success: function () {
                 $('[data-noteid=' + note_id + ']').remove();
-                $('.editor').empty().append("<h1 class='text-center'>No note selected<h1>");
+                $('.note').click(function () {
+                    getNote($(this));
+                });
+
+                $('.note:first').click();
+//                $('.editor').empty().append("<h1 class='text-center'>No note selected<h1>");
             }
         });
     });

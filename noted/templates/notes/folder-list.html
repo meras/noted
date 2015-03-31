@@ -1,0 +1,18 @@
+<div class="col-lg-2 sidebar">
+    <ul class="nav nav-sidebar folder-list">
+        <li class="active">
+            <a href="http://google.com" data-toggle="modal" data-target=".bs-example-modal-sm">
+                New folder
+                <span class="sr-only">(current)</span>
+            </a>
+        </li>
+        {% for folder in folders %}
+            <li data-folderid="{{ folder.id }}">
+                <a class="folder" href="{% url 'notes:folder'  folder.slug %}">
+                    {{ folder.title }}
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+</div>

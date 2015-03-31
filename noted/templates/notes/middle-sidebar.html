@@ -1,28 +1,49 @@
+<div class="col-md-2 col-md-offset-2 sidebar" id="notelist">
+    {#######      BUTTONS      #######}
+    {#    <div class="btn-toolbar" aria-label="Contextual buttons">#}
+    {#######      NEW NOTE      #######}
+    <button id="new" type="button" class="btn btn-info pull-left">
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </button>
+    {#######      SAVE NOTE      #######}
+    <button id="save" type="button" class="btn btn-success pull-right">
+        <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
+    </button>
 
-    <div class="" aria-label="Contextual buttons">
-        {#######      NEW NOTE      #######}
-        <button id="new" type="button" class="btn btn-info">
-            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-        </button>
-        <button type="button" class="btn btn-default" data-toggle="tooltip" data-placement="top"
-                title="Tooltip on top">Tooltip on top
-        </button>
-        {#######      SAVE NOTE      #######}
-        <button id="save" type="button" class="btn btn-success">
-            <span class="glyphicon glyphicon-floppy-disk" aria-hidden="true"></span>
-        </button>
-
-    </div>
+    {#    </div>#}
 
     {#######      SEARCH      #######}
     <div class="input-group">
         <input type="text" class="form-control" placeholder="Search for...">
         <span
-            class="input-group-btn">
+                class="input-group-btn">
             <button class="btn btn-default" type="button">
             <span
-            class="glyphicon glyphicon-search">
+                    class="glyphicon glyphicon-search">
             </span>
             </button>
         </span>
     </div>
+
+    {#######      NOTE LIST      #######}
+    <div class="list-group">
+        {% for note in notes %}
+            <a belongs-to="{{ note.folder }}" data-noteid="{{ note.id }}" href="#"
+               class="list-group-item note">
+                <div class="header">
+                    <strong class="primary-font"
+                            data-placeholder="">{{ note.title }}</strong>
+                    <small class="pull-right text-muted">
+                        <span class="glyphicon glyphicon-time"></span>
+                        {{ note.timestamp|date:"M j" }}
+                    </small>
+                </div>
+                <p>
+                    <small class="preview">
+                        {{ note.body|slice:":40"|striptags }}
+                    </small>
+                </p>
+            </a>
+        {% endfor %}
+    </div>
+</div>

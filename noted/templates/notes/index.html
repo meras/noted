@@ -1,42 +1,22 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-    <div id="sunset">
-        {#        {% if notes %}#}
-        {#    <script>$('#mango').css("background-image", "url(http://i.imgur.com/RDBMPs9.jpg",);  </script>#}
-        {#            <h1>You have no notes</h1>#}
-        {#            <button type="button" class="btn btn-success">New</button>#}
-        {#        {% else %}#}
 
-        <div class="container-fluid">
-            <div class="row">
+    {#######      ADD FOLDER MODAL      #######}
+    {% include 'notes/addfolder.html' %}
+    <div class="container-fluid">
+        <div class="row">
 
+            <div class="test">
                 {#######      FOLDERS      #######}
-                <div class="col-sm-2 sidebar">
-
-                    <ul class="nav nav-sidebar folder-list">
-                        {% for folder in folders %}
-                            <li data-folderid="{{ folder.id }}">
-                                <a class="folder" href="{% url 'notes:folder'  folder.slug %}">
-                                    {{ folder.title }}
-                                    <span class="sr-only">(current)</span>
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                </div>
+                {% include 'notes/folder-list.html' %}
 
                 {#######      MIDDLE SIDEBAR      #######}
-            <div class="col-sm-2 col-sm-offset-2 sidebar" id="notelist">
                 {% include 'notes/middle-sidebar.html' %}
-
-                {#######      NOTE LIST      #######}
-                {% include 'notes/note-list.html' %}
-
             </div>
             {#######      NOTE CONTENT      #######}
             {% include 'notes/note-content.html' %}
-        </div>
 
+        </div>
     </div>
 {% endblock body %}
