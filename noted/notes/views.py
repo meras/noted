@@ -7,7 +7,6 @@ from forms import NoteForm, TagForm
 from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.utils.html import strip_tags
 
 
 @login_required()
@@ -15,8 +14,9 @@ def index_view(request):
     context_dict = {}
 
     notes = Note.objects.all().order_by('-timestamp')
-    #notes = notes.filter(author=request.user)
+    # notes = notes.filter(author=request.user)
     folders = Folder.objects.all().order_by('-id')
+    folders = folders.filter(owner=request.user)
     tags = Tag.objects.all()
 
     context_dict['notes'] = notes
@@ -90,7 +90,7 @@ def edit_note(request):
             note = form.save()
             messages.add_message(request, messages.INFO, "Note added")
             # return JsonResponse({'title': note.title,'preview': strip_tags(note.body[:80])})
-            return render(request, 'notes/note_entry.html', {'note': note})
+            return render(request, 'notes/note-entry.html', {'note': note})
 
 
 @login_required
@@ -117,7 +117,7 @@ def add_note(request):
             note.save()
             # return HttpResponseRedirect(reverse('notes:index'))
             # return JsonResponse({'title': note.title, 'body': note.body, 'timestamp': note.timestamp})
-            return render(request, 'notes/note_entry.html', {'note': note})
+            return render(request, 'notes/note-entry.html', {'note': note})
 
 
 from forms import FolderForm
@@ -157,7 +157,7 @@ def folder(request, folder_title_slug):
         # If we can't, the .get() method raises a DoesNotExist exception.
         # So the .get() method returns one model instance or raises an exception.
         folder = Folder.objects.get(slug=folder_title_slug)
-        folders = Folder.objects.all()
+        folders = Folder.objects.all().filter(owner=request.user)
         context_dict['thisFolder'] = folder
         context_dict['folders'] = folders
         # Retrieve all of the associated pages.
