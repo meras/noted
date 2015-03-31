@@ -1,21 +1,25 @@
-{% extends 'base.html' %}
-{% load static %}
-{% block body %}
-    <h1>Add a Category</h1>
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
 
-    <form id="category_form" method="post" action="/notes/">
-
-        {% csrf_token %}
-        {% for hidden in form.hidden_fields %}
-            {{ hidden }}
-        {% endfor %}
-
-        {% for field in form.visible_fields %}
-            {{ field.errors }}
-            {{ field.help_text }}
-            {{ field }}
-        {% endfor %}
-
-        <input type="submit" name="submit" value="Create Folder"/>
-    </form>
-{% endblock body %}
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                        aria-hidden="true">×</span></button>
+                <h4 class="modal-title" id="mySmallModalLabel">Add folder</h4>
+            </div>
+            <div class="modal-body">
+                {% if folder %}
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        {{ form }}
+                    </form>
+                {% endif %}
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="submit" value="New Folder" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
