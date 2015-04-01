@@ -10,5 +10,6 @@ urlpatterns = patterns('',
                        url(r'^addtag/', add_tag, name='addtag'),
                        url(r'^note/$', note_content, name='note'),
                        url(r'^folder/(?P<folder_title_slug>[\w\-]+)/$', folder, name='folder'),
+                       url(r'^fold/$', folder_content, name='folder_content'),
                        url(r'^addfolder/$', add_folder, name='addfolder')
 )

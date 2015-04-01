@@ -1,100 +1,99 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block body %}
-    <div id="sunset">
-        {% if not notes %}
-            {#    <script>$('#mango').css("background-image", "url(http://i.imgur.com/RDBMPs9.jpg",);  </script>#}
-            <h1>You have no notes</h1>
-            <button type="button" class="btn btn-success">New</button>
-        {% else %}
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-sm-2 sidebar">
-                        <ul class="nav nav-sidebar folder-list">
-                            {% for folder in folders %}
-                                <li data-folderid="{{ folder.id }}">
-                                    <a class="folder" href="/notes/folder/{{ folder.slug }}">
-                                        {{ folder.title }}
-                                        <span class="sr-only">(current)</span>
-                                    </a>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {# sidepanel with the list of notes#}
-                    <div class="col-sm-2 col-sm-offset-2 sidebar" id="notelist">
-                        <!-- /input-group -->
-                        <div class="list-group">
-                            {% for note in notes %}
-                                <a belongs-to="{{ note.folder }}" data-noteid="{{ note.id }}" href="#"
-                                   class="list-group-item note">
-                                    <div class="header">
-                                        <strong class="primary-font" data-placeholder="">{{ note.title }}</strong>
-                                        <small class="pull-right text-muted">
-                                            <span class="glyphicon glyphicon-time"></span>{{ note.timestamp|date:"M j" }}
-                                        </small>
-                                    </div>
-                                    <p>
-                                        <small class="preview">
-                                            {{ note.body|slice:":80"|striptags }}
-                                        </small>
-                                    </p>
+    {% if not notes %}
+        <h1>You have no notes</h1>
+        <button type="button" class="btn btn-success">New</button>
+    {% else %}
+        <div class="container-fluid">
+            <div class="row">
+                {# folder list sidepanel#}
+                <div class="col-sm-2 sidebar">
+                    <ul class="nav nav-sidebar folder-list">
+                        {% for folder in folders %}
+                            <li>
+                                <a data-folderid="{{ folder.id }}" class="folder">
+{#                                <a data-folderid="{{ folder.id }}" class="folder" href="/notes/folder/{{ folder.slug }}">#}
+                                    {{ folder.title }}
                                 </a>
-                            {% endfor %}
-                        </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {# sidepanel with the list of notes#}
+                <div class="col-sm-2 col-sm-offset-2 sidebar" id="notelist">
+                    <!-- /input-group -->
+                    <div class="list-group">
+                        {% for note in notes %}
+                            <a belongs-to="{{ note.folder }}" data-noteid="{{ note.id }}" href="#"
+                               class="list-group-item note">
+                                <div class="header">
+                                    <strong class="primary-font" data-placeholder="">{{ note.title }}</strong>
+                                    <small class="pull-right text-muted">
+                                        <span class="glyphicon glyphicon-time"></span>{{ note.timestamp|date:"M j" }}
+                                    </small>
+                                </div>
+                                <p>
+                                    <small class="preview">
+                                        {{ note.body|slice:":80"|striptags }}
+                                    </small>
+                                </p>
+                            </a>
+                        {% endfor %}
                     </div>
-                    <div class="col-sm-8 col-sm-offset-4 main">
-                        <div class="note-info" id="">
-                            <section class="h2">{{ notes.first.title }}</section>
-                        </div>
-                        <div class="btn-group" role="group" aria-label="Contextual buttons">
-                            <button type="button" class="btn btn-default" id="new">New</button>
-                            <button type="button" class="btn btn-default" id="save">Save</button>
-                            <button type="button" class="btn btn-default" id="delete">Delete</button>
-                            <small class="pull-right text-muted" id="count">
-                                ...
-                            </small>
-                        </div>
+                </div>
+                {# Editor window#}
+                <div class="col-sm-8 col-sm-offset-4 main">
+                    <div class="note-info" id="{{ notes.first.id }}">
+                        <section class="h2">{{ notes.first.title }}</section>
+                    </div>
+                    <div class="btn-group" role="group" aria-label="Contextual buttons">
+                        <button type="button" class="btn btn-default" id="new">New</button>
+                        <button type="button" class="btn btn-default" id="save">Save</button>
+                        <button type="button" class="btn btn-default" id="delete">Delete</button>
+                        <small class="pull-right text-muted" id="count">
+                            ...
+                        </small>
+                    </div>
 
-                        <div class="editor">
-                            {{ notes.first.body|safe }}
-                        </div>
+                    <div class="editor">
+                        {{ notes.first.body|safe }}
                     </div>
                 </div>
             </div>
+        </div>
 
-            <script>
-                var editor = new MediumEditor('.editor', {
-                            buttons: ['bold', 'italic', 'header1', 'header2', 'anchor', 'unorderedlist', 'orderedlist'],
-                            cleanPastedHTML: false
-                        }),
-                        title = new MediumEditor('.note-info>section', {
-                            placeholder: 'Untitled note...',
-                            disableToolbar: true,
-                            disableReturn: true
-                        });
+        <script>
+            var editor = new MediumEditor('.editor', {
+                        buttons: ['bold', 'italic', 'header1', 'header2', 'anchor', 'unorderedlist', 'orderedlist'],
+                        cleanPastedHTML: false
+                    }),
+                    title = new MediumEditor('.note-info>section', {
+                        placeholder: 'Untitled note...',
+                        disableToolbar: true,
+                        disableReturn: true
+                    });
+            {##}
+            {#                function wordCount(val) {#}
+            {#                    return {#}
+            {#                        charactersNoSpaces: val.replace(/\s+/g, '').length,#}
+            {#                        characters: val.length,#}
+            {#                        words: val.match(/\S+/g).length,#}
+            {#                        lines: val.split(/\r*\n/).length#}
+            {#                    }#}
+            {#                }#}
+            {##}
+            {##}
+            {#                var count = $('#count');#}
+            {##}
+            {#                $('.editor').on('input', function () {#}
+            {##}
+            {#                    var c = wordCount(this.value);#}
+            {##}
+            {#                    count.val(#}
+            {#                            "Count: " + c.words);#}
 
-                function wordCount(val) {
-                    return {
-                        charactersNoSpaces: val.replace(/\s+/g, '').length,
-                        characters: val.length,
-                        words: val.match(/\S+/g).length,
-                        lines: val.split(/\r*\n/).length
-                    }
-                }
-
-
-                var count = $('#count');
-
-                $('.editor').on('input', function () {
-
-                    var c = wordCount(this.value);
-
-                    count.val(
-                                    "Count: " + c.words);
-
-                });
-            </script>
-            </div>
-        {% endif %}
+            {#                });#}
+        </script>
+    {% endif %}
 {% endblock body %}

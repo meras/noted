@@ -1,3 +1,4 @@
+{% for note in notes %}
 <a data-noteid="{{ note.id }}" href="#" class="list-group-item note" >
     <div class="header">
         <strong class="primary-font">{{note.title}}</strong>
@@ -10,3 +11,4 @@
         </small>
     </p>
 </a>
+{% endfor %}

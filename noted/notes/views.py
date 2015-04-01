@@ -8,11 +8,12 @@ from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils.html import strip_tags
+import json
 
 @login_required()
 def index_view(request):
     notes = Note.objects.all().order_by('-timestamp')
-    folders = Folder.objects.all().order_by('-id')
+    folders = Folder.objects.all()
     tags = Tag.objects.all()
     return render(request, 'notes/index.html', {'notes': notes, 'tags': tags, 'folders': folders})
 
@@ -46,7 +47,7 @@ def add_tag(request):
         form = TagForm(instance=tag)
     return render(request, 'notes/addtag.html', {'form': form, 'tag': tag})
 
-
+@login_required
 def note_content(request):
     """
 
@@ -72,9 +73,8 @@ def edit_note(request):
         form = NoteForm(request.POST, instance=note)
         if form.is_valid():
             note = form.save()
-            messages.add_message(request, messages.INFO, "Note added")
-            #return JsonResponse({'title': note.title,'preview': strip_tags(note.body[:80])})
-            return render(request, 'notes/note_entry.html', {'note': note})
+            notes = [note]
+            return render(request, 'notes/note_entry.html', {'notes': notes})
 
 
 @login_required
@@ -99,9 +99,8 @@ def add_note(request):
             note = form.save(commit=False)
             note.folder = Folder.objects.get(slug=folder_name)
             note.save()
-            # return HttpResponseRedirect(reverse('notes:index'))
-            # return JsonResponse({'title': note.title, 'body': note.body, 'timestamp': note.timestamp})
-            return render(request, 'notes/note_entry.html', {'note': note})
+            notes = [note]
+            return render(request, 'notes/note_entry.html', {'notes': notes})
 
 
 from forms import FolderForm
@@ -158,3 +157,25 @@ def folder(request, folder_title_slug):
 
     # Go render the response and return it to the client.
     return render(request, 'notes/index.html', context_dict)
+
+
+@login_required
+def folder_content(request):
+    """
+    :param request:
+    :return:
+    """
+    if request.method == 'GET':
+        folder = Folder.objects.get(id=request.GET['folder_id'])
+        notes = Note.objects.filter(folder=folder)
+
+        note_list = {}
+        for note in notes:
+            note_list[note.id] = {
+                'title': note.title,
+                'preview': strip_tags(note.body[:80]),
+                'timestamp': note.timestamp
+            }
+        # the better alternative here would be to return a json object
+        # and render the template client side to reduce bandwidth
+        return render(request, 'notes/note_entry.html', {'notes': notes})

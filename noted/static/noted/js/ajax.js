@@ -26,39 +26,30 @@ function getNote(thisRef) {
     })
 }
 
+function getNoteList(thisRef) {
+    var folder_id = thisRef.attr("data-folderid");
+    $.get('/notes/fold/', {folder_id: folder_id}, function (data) {
+        $('#notelist>.list-group').empty().html(data);
+    });
+}
+
 function validateURL(textval) {
     var urlregex = new RegExp( "^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
     return urlregex.test(textval);
 }
 
-// inserts a new empty note
-function addNote() {
-    var csrftoken = $.cookie('csrftoken');
-    var folder_id = 1;
-    var url = window.location.pathname.split( '/' )[3];
-    var data = {
-        title: "New Note",
-        body: "",
-        folder_id: folder_id,
-        folder_name: url,
-        csrfmiddlewaretoken: $.cookie('csrftoken')
-    };
-
-    $.post("/notes/addnote/", data).success(function (data) {
-        $('.list-group').prepend(data);
-        $('.note:first').on("click", function () {
-            getNote($(this))
-        });
-    });
-}
 
 $(document).ready(function () {
+    // retrieve a list of notes that belong to a folder
+    $('.folder').click(function () {
+        getNoteList($(this));
+    });
+
+
     // retrieve a note once clicked on a list
     $('.note').click(function () {
         getNote($(this));
     });
-
-    $('.note:first').click();
 
     // this creates a note as a new instance
     $('#new').click(function () {
@@ -80,7 +71,6 @@ $(document).ready(function () {
             $('.note:first').on("click", function () {
                 getNote($(this))
             });
-            console.log($('.note:first'));
         });
 
     });
@@ -113,5 +103,12 @@ $(document).ready(function () {
     });
 
     $('.editor').on('paste', function() {console.log(this)})
+
+    $('.editor').on("input", function(){
+        var text = $('.editor').text();
+        var wordCount = text.trim().split(' ').length;
+
+        $('#count').html(wordCount);
+    });
 });
 
