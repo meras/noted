@@ -43,6 +43,8 @@ $(document).ready(function () {
     // retrieve a list of notes that belong to a folder
     $('.folder').click(function () {
         getNoteList($(this));
+        $('.folder-list>.active').removeClass('active');
+        $(this).parent().addClass('active');
     });
 
 
