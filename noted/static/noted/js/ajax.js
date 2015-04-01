@@ -1,3 +1,4 @@
+/*global $:false, jQuery:false */
 //edit an existing note
 function saveChanges() {
     var note_id = $('.note-info').attr('id');
@@ -12,24 +13,28 @@ function saveChanges() {
     };
 
     $.post("/notes/editnote/", data).success(function (data) {
-        //$('[data-noteid=' + note_id + ']>p>small').empty().append(data.preview);
-        $('[data-noteid=' + note_id + ']').replaceWith(data);
+        //$('#notelist [data-noteid=' + note_id + ']').replaceWith(data);
+        var note = $('#notelist a[data-noteid=' + note_id + ']');
+        $(note).find('strong').html(data.title);
+        $(note).find('.preview').html(data.preview);
     });
 }
 
 function getNote(thisRef) {
     var note_id = thisRef.attr("data-noteid");
-    $.getJSON('/notes/note/', {note_id: note_id}, function (data) {
+    $.getJSON('/notes/note/', {note_id: note_id}, rast);
+    function rast(data) {
         $('.note-info').attr('id', note_id);
         $('.note-info > section').html(data.title);
         $('.editor').html(data.body);
-    })
+    }
 }
 
 function getNoteList(thisRef) {
     var folder_id = thisRef.attr("data-folderid");
     $.get('/notes/fold/', {folder_id: folder_id}, function (data) {
         $('#notelist>.list-group').empty().html(data);
+        getNote($('#notelist .note').first());
     });
 }
 
@@ -41,37 +46,35 @@ function validateURL(textval) {
 
 $(document).ready(function () {
     // retrieve a list of notes that belong to a folder
-    $('.folder').click(function () {
+    $('.folder').on('click', function () {
         getNoteList($(this));
         $('.folder-list>.active').removeClass('active');
         $(this).parent().addClass('active');
     });
 
-
     // retrieve a note once clicked on a list
-    $('.note').click(function () {
+    $('#notelist').on('click', '.note', function () {
         getNote($(this));
+        $('#notelist .active').removeClass('active');
+        $(this).addClass('active');
     });
 
     // this creates a note as a new instance
-    $('#new').click(function () {
+    $('#new').on('click', function () {
         var csrftoken = $.cookie('csrftoken');
-        //TODO get correct folder id
-        var folder_id = 1;
-        var url = window.location.pathname.split( '/' )[3];
+        var folder_id = $('.folder-list>.active>a').attr("data-folderid");
 
         var data = {
             title: "New Note",
             body: " ",
             folder_id: folder_id,
-            folder_name: url,
             csrfmiddlewaretoken: $.cookie('csrftoken')
         };
 
         $.post("/notes/addnote/", data).success(function (data) {
             $('.list-group').prepend(data);
             $('.note:first').on("click", function () {
-                getNote($(this))
+                getNote($(this));
             });
         });
 
@@ -79,7 +82,7 @@ $(document).ready(function () {
 
 
     //delete an existing note
-    $('#delete').click(function () {
+    $('#delete').on('click', function () {
         var note_id = $('.note-info').attr('id');
         var note_title = $('.note-info > section').html();
         var csrftoken = $.cookie('csrftoken');
@@ -100,17 +103,20 @@ $(document).ready(function () {
         });
     });
 
-    $('#save').click(function () {
-        saveChanges()
+    $('#save').on('click', function () {
+        saveChanges();
     });
 
-    $('.editor').on('paste', function() {console.log(this)})
+    $('.editor').on({
+        paste: function () {
+            console.log(this);
+        },
+        input: function () {
+            var text = $('.editor').text();
+            var wordCount = text.trim().split(' ').length;
 
-    $('.editor').on("input", function(){
-        var text = $('.editor').text();
-        var wordCount = text.trim().split(' ').length;
-
-        $('#count').html(wordCount);
+            $('#count').html(wordCount);
+        }
     });
 });
 

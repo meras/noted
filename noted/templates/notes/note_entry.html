@@ -1,14 +1,16 @@
 {% for note in notes %}
-<a data-noteid="{{ note.id }}" href="#" class="list-group-item note" >
-    <div class="header">
-        <strong class="primary-font">{{note.title}}</strong>
-        <small class="pull-right text-muted">
-            <span class="glyphicon glyphicon-time"></span>{{  note.timestamp|date:"M j" }}</small>
-    </div>
-    <p>
-        <small class="preview">
-            {{ note.body|slice:":80"|striptags }}
-        </small>
-    </p>
-</a>
+    <a belongs-to="{{ note.folder }}" data-noteid="{{ note.id }}"
+       class="list-group-item note {% if forloop.first %} active {% endif %}">
+        <div class="header">
+            <strong class="primary-font" data-placeholder="">{{ note.title }}</strong>
+            <small class="pull-right text-muted">
+                <span class="glyphicon glyphicon-time"></span>{{ note.timestamp|date:"M j" }}
+            </small>
+        </div>
+        <p>
+            <small class="preview">
+                {{ note.body|slice:":80"|striptags }}
+            </small>
+        </p>
+    </a>
 {% endfor %}

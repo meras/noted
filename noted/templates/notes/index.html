@@ -11,9 +11,8 @@
                 <div class="col-sm-2 sidebar">
                     <ul class="nav nav-sidebar folder-list">
                         {% for folder in folders %}
-                            <li>
+                            <li {% if forloop.first %} class="active"{% endif %}>
                                 <a data-folderid="{{ folder.id }}" class="folder">
-{#                                <a data-folderid="{{ folder.id }}" class="folder" href="/notes/folder/{{ folder.slug }}">#}
                                     {{ folder.title }}
                                 </a>
                             </li>
@@ -22,24 +21,8 @@
                 </div>
                 {# sidepanel with the list of notes#}
                 <div class="col-sm-2 col-sm-offset-2 sidebar" id="notelist">
-                    <!-- /input-group -->
                     <div class="list-group">
-                        {% for note in notes %}
-                            <a belongs-to="{{ note.folder }}" data-noteid="{{ note.id }}" href="#"
-                               class="list-group-item note">
-                                <div class="header">
-                                    <strong class="primary-font" data-placeholder="">{{ note.title }}</strong>
-                                    <small class="pull-right text-muted">
-                                        <span class="glyphicon glyphicon-time"></span>{{ note.timestamp|date:"M j" }}
-                                    </small>
-                                </div>
-                                <p>
-                                    <small class="preview">
-                                        {{ note.body|slice:":80"|striptags }}
-                                    </small>
-                                </p>
-                            </a>
-                        {% endfor %}
+                        {% include 'notes/note_entry.html' %}
                     </div>
                 </div>
                 {# Editor window#}

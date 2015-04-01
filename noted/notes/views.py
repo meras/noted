@@ -2,18 +2,19 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from models import *
-from forms import NoteForm, TagForm
 from django.utils.text import slugify
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.utils.html import strip_tags
-import json
+
+from models import *
+from forms import NoteForm, TagForm
+
 
 @login_required()
 def index_view(request):
-    notes = Note.objects.all().order_by('-timestamp')
     folders = Folder.objects.all()
+    notes = Note.objects.filter(folder=folders.first).order_by('-timestamp')
     tags = Tag.objects.all()
     return render(request, 'notes/index.html', {'notes': notes, 'tags': tags, 'folders': folders})
 
@@ -47,6 +48,7 @@ def add_tag(request):
         form = TagForm(instance=tag)
     return render(request, 'notes/addtag.html', {'form': form, 'tag': tag})
 
+
 @login_required
 def note_content(request):
     """
@@ -54,15 +56,10 @@ def note_content(request):
     :param request:
     :return:
     """
-    note_id = None
     if request.method == 'GET':
         note_id = request.GET['note_id']
-
-    note = None
-    if note_id:
         note = Note.objects.get(pk=note_id)
-
-    return JsonResponse({'title': note.title, 'body': note.body})
+        return JsonResponse({'title': note.title, 'body': note.body})
 
 
 @login_required
@@ -74,7 +71,10 @@ def edit_note(request):
         if form.is_valid():
             note = form.save()
             notes = [note]
-            return render(request, 'notes/note_entry.html', {'notes': notes})
+            # return render(request, 'notes/note_entry.html', {'notes': notes})
+            return JsonResponse({'title': note.title, 'preview': strip_tags(note.body[:80])})
+
+
 
 
 @login_required
@@ -94,13 +94,12 @@ def delete_note(request):
 def add_note(request):
     if request.is_ajax():
         form = NoteForm(request.POST)
-        folder_name = request.POST.get('folder_name')
+        folder_id = request.POST.get('folder_id')
         if form.is_valid():
             note = form.save(commit=False)
-            note.folder = Folder.objects.get(slug=folder_name)
+            note.folder = Folder.objects.get(pk=folder_id)
             note.save()
-            notes = [note]
-            return render(request, 'notes/note_entry.html', {'notes': notes})
+            return render(request, 'notes/note_entry.html', {'notes': [note]})
 
 
 from forms import FolderForm
