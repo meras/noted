@@ -1,4 +1,21 @@
 /*global $:false, jQuery:false */
+
+function newNote() {
+    var csrftoken = $.cookie('csrftoken');
+    var folder_id = $('.folder-list>.active>a').attr("data-folderid");
+
+    var data = {
+        title: "New Note",
+        body: " ",
+        folder_id: folder_id,
+        csrfmiddlewaretoken: $.cookie('csrftoken')
+    };
+
+    $.post("/notes/addnote/", data).success(function (data) {
+        $('.list-group').prepend(data);
+    });
+}
+
 //edit an existing note
 function saveChanges() {
     var note_id = $('.note-info').attr('id');
@@ -22,12 +39,11 @@ function saveChanges() {
 
 function getNote(thisRef) {
     var note_id = thisRef.attr("data-noteid");
-    $.getJSON('/notes/note/', {note_id: note_id}, rast);
-    function rast(data) {
+    $.getJSON('/notes/note/', {note_id: note_id}, function (data) {
         $('.note-info').attr('id', note_id);
         $('.note-info > section').html(data.title);
         $('.editor').html(data.body);
-    }
+    });
 }
 
 function getNoteList(thisRef) {
@@ -61,23 +77,7 @@ $(document).ready(function () {
 
     // this creates a note as a new instance
     $('#new').on('click', function () {
-        var csrftoken = $.cookie('csrftoken');
-        var folder_id = $('.folder-list>.active>a').attr("data-folderid");
-
-        var data = {
-            title: "New Note",
-            body: " ",
-            folder_id: folder_id,
-            csrfmiddlewaretoken: $.cookie('csrftoken')
-        };
-
-        $.post("/notes/addnote/", data).success(function (data) {
-            $('.list-group').prepend(data);
-            $('.note:first').on("click", function () {
-                getNote($(this));
-            });
-        });
-
+        newNote();
     });
 
 
@@ -118,5 +118,6 @@ $(document).ready(function () {
             $('#count').html(wordCount);
         }
     });
+    $('.editor').focus();
 });
 
