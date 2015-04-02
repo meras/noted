@@ -104,5 +104,10 @@ body {
 }
 
 .note-info>section {
+    height: 20px;
     outline: none;
+}
+
+.medium-editor-placeholder:after {
+    color: #337ab7
 }

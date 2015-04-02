@@ -94,6 +94,7 @@ def delete_note(request):
 def add_note(request):
     if request.is_ajax():
         form = NoteForm(request.POST)
+        print form
         folder_id = request.POST.get('folder_id')
         if form.is_valid():
             note = form.save(commit=False)

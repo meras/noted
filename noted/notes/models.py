@@ -34,9 +34,9 @@ class Note(models.Model):
     It is not possible for a single note to exist in two different folders.
     If the note is copied, a new note is created. If the new note is edited, the original will not be changed.
     """
-    title = models.CharField(max_length=200)
+    title = models.CharField(max_length=200, blank=True)
     #author = models.ForeignKey(User)
-    body = models.TextField()
+    body = models.TextField(blank=True)
     folder = models.ForeignKey(Folder)
     timestamp = models.DateTimeField(auto_now_add=True)
 

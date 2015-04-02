@@ -10,13 +10,13 @@ $(document).ready(function () {
         var csrftoken = $.cookie('csrftoken'),
             folder_id = $('.folder-list>.active>a').attr("data-folderid"),
             data = {
-                title: "New Note",
-                body: " ",
+                title: "",
+                body: "",
                 folder_id: folder_id,
                 csrfmiddlewaretoken: csrftoken
             };
         $.post("/notes/addnote/", data).success(function (data) {
-            $('.list-group').prepend(data);
+            $('#notelist>.list-group').prepend(data).find('a>.header>strong:first').html("Untitled note");
         });
     }
 
