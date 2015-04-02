@@ -1,67 +1,74 @@
-/*global $:false, jQuery:false */
-
-function newNote() {
-    var csrftoken = $.cookie('csrftoken');
-    var folder_id = $('.folder-list>.active>a').attr("data-folderid");
-
-    var data = {
-        title: "New Note",
-        body: " ",
-        folder_id: folder_id,
-        csrfmiddlewaretoken: $.cookie('csrftoken')
-    };
-
-    $.post("/notes/addnote/", data).success(function (data) {
-        $('.list-group').prepend(data);
-    });
-}
-
-//edit an existing note
-function saveChanges() {
-    var note_id = $('.note-info').attr('id');
-    var csrftoken = $.cookie('csrftoken');
-    var note_title = $('.note-info > section').text();
-    var note_content = $('.editor').html();
-    var data = {
-        id: note_id,
-        title: note_title,
-        body: note_content,
-        csrfmiddlewaretoken: $.cookie('csrftoken')
-    };
-
-    $.post("/notes/editnote/", data).success(function (data) {
-        //$('#notelist [data-noteid=' + note_id + ']').replaceWith(data);
-        var note = $('#notelist a[data-noteid=' + note_id + ']');
-        $(note).find('strong').html(data.title);
-        $(note).find('.preview').html(data.preview);
-    });
-}
-
-function getNote(thisRef) {
-    var note_id = thisRef.attr("data-noteid");
-    $.getJSON('/notes/note/', {note_id: note_id}, function (data) {
-        $('.note-info').attr('id', note_id);
-        $('.note-info > section').html(data.title);
-        $('.editor').html(data.body);
-    });
-}
-
-function getNoteList(thisRef) {
-    var folder_id = thisRef.attr("data-folderid");
-    $.get('/notes/fold/', {folder_id: folder_id}, function (data) {
-        $('#notelist>.list-group').empty().html(data);
-        getNote($('#notelist .note').first());
-    });
-}
-
-function validateURL(textval) {
-    var urlregex = new RegExp( "^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
-    return urlregex.test(textval);
-}
-
-
+/*global $:false, jQuery:false, document:false */
 $(document).ready(function () {
-    // retrieve a list of notes that belong to a folder
+    $.embedly.defaults.key = 'a8e0caf281894a17ac457ee551d96a74';
+    /*
+     * Helper functions
+     */
+
+    /* Create a new note instance*/
+    function newNote() {
+        var csrftoken = $.cookie('csrftoken'),
+            folder_id = $('.folder-list>.active>a').attr("data-folderid"),
+            data = {
+                title: "New Note",
+                body: " ",
+                folder_id: folder_id,
+                csrfmiddlewaretoken: csrftoken
+            };
+        $.post("/notes/addnote/", data).success(function (data) {
+            $('.list-group').prepend(data);
+        });
+    }
+
+    /* Edit an existing note*/
+    function saveChanges() {
+        var note_id = $('.note-info').attr('id'),
+            csrftoken = $.cookie('csrftoken'),
+            note_title = $('.note-info > section').text(),
+            note_content = $('.editor').html(),
+            data = {
+                id: note_id,
+                title: note_title,
+                body: note_content,
+                csrfmiddlewaretoken: csrftoken
+            };
+
+        $.post("/notes/editnote/", data).success(function (data) {
+            var note = $('#notelist a[data-noteid=' + note_id + ']');
+            $(note).find('strong').html(data.title);
+            $(note).find('.preview').html(data.preview);
+        });
+    }
+
+    /* Retrieve note content as JSON*/
+    function getNote(thisRef) {
+        var note_id = thisRef.attr("data-noteid");
+        $.getJSON('/notes/note/', {note_id: note_id}, function (data) {
+            $('.note-info').attr('id', note_id);
+            $('.note-info > section').html(data.title);
+            $('.editor').html(data.body);
+        });
+    }
+
+    /* Retrieve a list of notes that belong to a folder */
+    function getNoteList(thisRef) {
+        var folder_id = thisRef.attr("data-folderid");
+        $.get('/notes/fold/', {folder_id: folder_id}, function (data) {
+            $('#notelist>.list-group').empty().html(data);
+            getNote($('#notelist .note').first());
+        });
+    }
+
+    function validateURL(textval) {
+        var urlregex = new RegExp("^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
+        return urlregex.test(textval);
+    }
+
+    /*
+     * Event bindings
+     */
+
+    /* retrieve a list of notes that belong to a folder */
     $('.folder').on('click', function () {
         getNoteList($(this));
         $('.folder-list>.active').removeClass('active');
@@ -108,8 +115,20 @@ $(document).ready(function () {
     });
 
     $('.editor').on({
-        paste: function () {
-            console.log(this);
+        /*
+         * Replaces pasted url's with an href and tries to embed it
+         */
+        paste: function (event) {
+            var pastedText = event.originalEvent.clipboardData.getData('text/plain');
+            if (validateURL(pastedText)) {
+                var newLink = $('<a href="' + pastedText + '">' + pastedText + '</a>');
+                $('.editor p:contains(' + pastedText + ')').replaceWith(newLink);
+                newLink.embedly({
+                    query: {
+                        maxwidth: 500
+                    }
+                });
+            }
         },
         input: function () {
             var text = $('.editor').text();
@@ -118,6 +137,10 @@ $(document).ready(function () {
             $('#count').html(wordCount);
         }
     });
+
     $('.editor').focus();
 });
 
+$(document).ajaxComplete(function () {
+    $('.editor').focus();
+});
