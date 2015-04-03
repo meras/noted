@@ -40,6 +40,7 @@ DEFAULT_APPS = (
 THIRD_PARTY_APPS = (
     'bootstrap3',
     'registration',
+    'haystack',
 )
 
 LOCAL_APPS = (
@@ -105,7 +106,7 @@ TEMPLATE_LOADERS = (
 )
 
 FIXTURE_DIRS = (
-   os.path.join(BASE_DIR,"notes/fixtures/"),
+    os.path.join(BASE_DIR,"notes/fixtures/"),
 )
 
 # Registration Redux
@@ -115,3 +116,9 @@ REGISTRATION_AUTO_LOGIN = True  # If True, the user will be automatically logged
 LOGIN_REDIRECT_URL = '/notes/'  # The page you want users to arrive at after they successful log in
 LOGIN_URL = '/accounts/login/'  # The page users are directed to if they are not logged in,
                                                                 # and are trying to access pages requiring authentication
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(os.path.dirname(__file__), 'whoosh_index'),
+    },
+}
