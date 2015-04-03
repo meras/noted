@@ -10,13 +10,14 @@ $(document).ready(function () {
         var csrftoken = $.cookie('csrftoken'),
             folder_id = $('.folder-list>.active>a').attr("data-folderid"),
             data = {
-                title: "",
-                body: "",
+                title: "Untitled note",
+                body: "<br>",
                 folder_id: folder_id,
                 csrfmiddlewaretoken: csrftoken
             };
-        $.post("/notes/addnote/", data).success(function (data) {
-            $('#notelist>.list-group').prepend(data).find('a>.header>strong:first').html("Untitled note");
+        $.post("/notes/addnote/", data, function (data) {
+            $('#notelist').children().prepend(data).children().first().trigger('click');
+            $('#title').empty();
         });
     }
 
@@ -24,7 +25,8 @@ $(document).ready(function () {
     function saveChanges() {
         var note_id = $('.note-info').attr('id'),
             csrftoken = $.cookie('csrftoken'),
-            note_title = $('.note-info > section').text(),
+            title = $('#title').text(),
+            note_title = title === "" ? "Untitled note" : title,
             note_content = $('.editor').html(),
             data = {
                 id: note_id,
@@ -34,7 +36,7 @@ $(document).ready(function () {
             };
 
         $.post("/notes/editnote/", data).success(function (data) {
-            var note = $('#notelist a[data-noteid=' + note_id + ']');
+            var note = $('#notelist').find('a[data-noteid=' + note_id + ']');
             $(note).find('strong').html(data.title);
             $(note).find('.preview').html(data.preview);
         });
@@ -45,7 +47,11 @@ $(document).ready(function () {
         var note_id = thisRef.attr("data-noteid");
         $.getJSON('/notes/note/', {note_id: note_id}, function (data) {
             $('.note-info').attr('id', note_id);
-            $('.note-info > section').html(data.title);
+            if (data.title === "Untitled note") {
+                $('#title').empty();
+            } else {
+                $('#title').html(data.title);
+            }
             $('.editor').html(data.body);
         });
     }
@@ -54,12 +60,12 @@ $(document).ready(function () {
     function getNoteList(thisRef) {
         var folder_id = thisRef.attr("data-folderid");
         $.get('/notes/fold/', {folder_id: folder_id}, function (data) {
-            $('#notelist>.list-group').empty().html(data);
-            getNote($('#notelist .note').first());
+            $('#notelist').children().empty().html(data);
         });
     }
 
     function validateURL(textval) {
+        //noinspection JSLint
         var urlregex = new RegExp("^(http|https|ftp)\://([a-zA-Z0-9\.\-]+(\:[a-zA-Z0-9\.&amp;%\$\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|([a-zA-Z0-9\-]+\.)*[a-zA-Z0-9\-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\:[0-9]+)*(/($|[a-zA-Z0-9\.\,\?\'\\\+&amp;%\$#\=~_\-]+))*$");
         return urlregex.test(textval);
     }
@@ -78,7 +84,7 @@ $(document).ready(function () {
     // retrieve a note once clicked on a list
     $('#notelist').on('click', '.note', function () {
         getNote($(this));
-        $('#notelist .active').removeClass('active');
+        $('#notelist').find('.active').removeClass('active');
         $(this).addClass('active');
     });
 
@@ -90,14 +96,13 @@ $(document).ready(function () {
 
     //delete an existing note
     $('#delete').on('click', function () {
-        var note_id = $('.note-info').attr('id');
-        var note_title = $('.note-info > section').html();
-        var csrftoken = $.cookie('csrftoken');
-        var data = {
-            id: note_id,
-            control: 'delete',
-            csrfmiddlewaretoken: $.cookie('csrftoken')
-        };
+        var note_id = $('.note-info').attr('id'),
+            csrftoken = $.cookie('csrftoken'),
+            data = {
+                id: note_id,
+                control: 'delete',
+                csrfmiddlewaretoken: csrftoken
+            };
 
         $.ajax({
             type: "POST",
@@ -119,9 +124,9 @@ $(document).ready(function () {
          * Replaces pasted url's with an href and tries to embed it
          */
         paste: function (event) {
-            var pastedText = event.originalEvent.clipboardData.getData('text/plain');
+            var pastedText = event.originalEvent.clipboardData.getData('text/plain'),
+                newLink = $('<a href="' + pastedText + '">' + pastedText + '</a>');
             if (validateURL(pastedText)) {
-                var newLink = $('<a href="' + pastedText + '">' + pastedText + '</a>');
                 $('.editor p:contains(' + pastedText + ')').replaceWith(newLink);
                 newLink.embedly({
                     query: {
@@ -136,9 +141,7 @@ $(document).ready(function () {
 
             $('#count').html(wordCount);
         }
-    });
-
-    $('.editor').focus();
+    }).focus();
 });
 
 $(document).ajaxComplete(function () {
