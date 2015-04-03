@@ -2,9 +2,9 @@
 <div class="note-content col-sm-6 col-sm-offset-5 main">
     <div class="note-info">
         <div class="row">
-            <section class="title h2 col-lg-5">{{ notes.first.title }}</section>
+            <section class="title h2 col-lg-5 pull-left">{{ notes.first.title }}</section>
 
-            <div class="btn-group-lg col-lg-offset-5 center-block">
+            <div class="btn-group-lg col-lg-offset-5 pull-right">
                 <a class="btn star" href="#"><i class="text-muted glyphicon glyphicon-star-empty"></i></a>
                 <a class="btn delete" href="#"><i class="text-muted glyphicon glyphicon-trash"></i></a>
                 <a class="btn font" href="#"><i class="text-muted glyphicon glyphicon-font"></i></a>
@@ -27,7 +27,7 @@
                 {% endfor %}
             </small>
 
-            <small class="word-count col-lg-1 col-lg-offset-5"></small>
+            <small class="word-count pull-right col-lg-1"></small>
         </div>
 
     </div>
